@@ -24,16 +24,19 @@ h1{
 .btn-register{
     color: var(--white-color);
 }
+.form-control:focus {
+    outline: none !important;
+    box-shadow: none !important;
+}
 .login-body{
-    background-image: url(../assets/badges/img/zorritaasd.svg); 
+    background-image: url(../assets/badges/img/zorritaof.svg); 
     background-size: cover;
     background-position: center;
 }
 .register-body{
-    background-image: url(../assets/badges/img/zorritaasd.svg); 
+    background-image: url(../assets/badges/img/zorritaof.svg); 
     background-size: cover;
     background-position: center;
-
 }
 
 .text-2{
