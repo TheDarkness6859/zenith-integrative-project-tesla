@@ -29,16 +29,57 @@ h1{
     box-shadow: none !important;
 }
 .login-body{
-    background-image: url(../assets/badges/img/zorritaof.svg); 
+    background-image: url(../assets/badges/img/zorrita.svg); 
     background-size: cover;
     background-position: center;
 }
 .register-body{
-    background-image: url(../assets/badges/img/zorritaof.svg); 
+    background-image: url(../assets/badges/img/zorrita.svg); 
     background-size: cover;
     background-position: center;
+    overflow: hidden;
+}
+.zorra{
+    animation: floatSpace 30s linear infinite;
+    box-sizing: border-box;
+    position: absolute;
+    left: 0;
+    width: 400px;
+    height: 200px;
+    z-index: 0; 
+    cursor: pointer;
 }
 
+@keyframes floatSpace {
+    0% {
+        transform: translate(30vw, -50vh) rotate(0deg);
+    }
+    15% {
+        transform: translate(40vw, -25vh) rotate(-8deg);
+    }
+    30% {
+        transform: translate(50vw, 0vh) rotate(-16deg);
+    }
+    45% {
+        transform: translate(60vw, 15vh) rotate(-24deg);
+    }
+    60% {
+        transform: translate(70vw, 30vh) rotate(-32deg);
+    }
+    75% {
+        transform: translate(80vw, 50vh) rotate(-40deg);
+    }
+    85% { /* Ajustado de 90% a 85% para mantener ritmo */
+        transform: translate(90vw, 70vh) rotate(-48deg);
+    }
+    95% { /* Ajustado para dar más tiempo a la salida */
+        transform: translate(110vw, 90vh) rotate(-56deg);
+    }
+    100% {
+        /* El final real debe ser 100%. Eliminamos el 110% */
+        transform: translate(120vw, 110vh) rotate(-56deg);
+    }
+}
 .text-2{
     color: #bbb;
     font-size: 16px;
