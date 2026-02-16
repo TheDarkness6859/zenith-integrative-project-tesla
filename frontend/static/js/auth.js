@@ -97,7 +97,7 @@ if (registerForm) {
         "Content-Type": "application/json"
         },
         body: JSON.stringify({
-        name: registerName.value,
+        full_name: registerName.value,
         email: registerEmail.value,
         password: registerPassword.value
         })
