@@ -29,12 +29,12 @@ h1{
     box-shadow: none !important;
 }
 .login-body{
-    background-image: url(../assets/badges/img/zorrita.svg); 
+    background-image: url(../assets/img/zorrita.svg); 
     background-size: cover;
     background-position: center;
 }
 .register-body{
-    background-image: url(../assets/badges/img/zorrita.svg); 
+    background-image: url(../assets/img/zorrita.svg); 
     background-size: cover;
     background-position: center;
     overflow: hidden;
@@ -48,6 +48,9 @@ h1{
     height: 200px;
     z-index: 0; 
     cursor: pointer;
+}
+.fade-out {
+    transition: 0.5s ease;
 }
 
 @keyframes floatSpace {

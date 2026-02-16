@@ -1,4 +1,4 @@
-import { loginForm, email, password, registerForm, registerName, registerEmail, registerPassword, confirmPassword} from "./elements.js";
+import { loginForm, email, password, registerForm, registerName, registerEmail, registerPassword, confirmPassword, loginMessage, registerMessage} from "./elements.js";
 
 //interactive button for watch password
 function togglePassword(inputId, iconId) {
@@ -64,15 +64,39 @@ if (loginForm) {
         localStorage.setItem("user", JSON.stringify(data.user));
         localStorage.setItem("token", data.token);
 
-        alert("Login correcto");
+        loginMessage.textContent = "Log In Successful";
+        loginMessage.className = "mt-3 text-success text-center";
         window.location.href = "/dashboard";
+        setTimeout(() => {
+            loginMessage.classList.add("fade-out")
+        }, 2500);
+        setTimeout(() => {
+            loginMessage.textContent = "";
+            loginMessage.className = "mt-3 text-center"
+        },3000);
     } else {
-        alert(data.message || "Error al iniciar sesión");
+        loginMessage.textContent = data.message || "Error to log in";
+        loginMessage.className = "mt-3 text-danger text-center"
+        setTimeout(() => {
+            loginMessage.classList.add("fade-out")
+        }, 2500);
+        setTimeout(() => {
+            loginMessage.textContent = "";
+            loginMessage.className = "mt-3 text-center"
+        },3000);
     }
 
     } catch (error) {
-    console.error(error);
-    alert("No se pudo conectar al servidor");
+        console.error(error);
+        loginMessage.textContent = "Fail! Error to connect to the server";
+        loginMessage.className = "mt-3 text-danger text-center";
+        setTimeout(() => {
+            loginMessage.classList.add("fade-out")
+        }, 2500);
+        setTimeout(() => {
+            loginMessage.textContent = "";
+            loginMessage.className = "mt-3 text-center"
+        },3000);
     }
     });
 }
@@ -84,9 +108,9 @@ if (registerForm) {
     registerForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    // Validar contraseñas
+    // Verify passwords
     if (registerPassword.value !== confirmPassword.value) {
-    alert("Las contraseñas no coinciden");
+    alert("The passwords aren't the same");
     return;
     }
 
@@ -106,15 +130,40 @@ if (registerForm) {
     const data = await response.json();
 
     if (response.ok) {
-        alert("Usuario registrado correctamente");
+        registerMessage.textContent("User registered correctly");
+        registerMessage.className = "mt-3 text-success";
+        registerForm.reset()
         window.location.href = "/";
+        setTimeout(() => {
+            registerMessage.classList.add("fade-out")
+        }, 2500);
+        setTimeout(() => {
+            registerMessage.textContent = "";
+            registerMessage.className = "mt-3 text-center"
+        },3000);
     } else {
-        alert(data.message || "Error al registrar usuario");
+        registerMessage.textContent = data.message || "Error to register the new user";
+        registerMessage.className = "mt-3 text-danger text-center";
+        setTimeout(() => {
+            registerMessage.classList.add("fade-out")
+        }, 2500);
+        setTimeout(() => {
+            registerMessage.textContent = "";
+            registerMessage.className = "mt-3 text-center"
+        },3000);
     }
 
     } catch (error) {
-    console.error(error);
-    alert("No se pudo conectar al servidor");
+        console.error(error);
+        registerMessage.textContent = "Fail! Error to connect to the server";
+        registerMessage.className = "mt-3 text-danger text-center";
+        setTimeout(() => {
+            registerMessage.classList.add("fade-out")
+        }, 2500);
+        setTimeout(() => {
+            registerMessage.textContent = "";
+            registerMessage.className = "mt-3 text-center"
+        },3000);
     }
 });
 }
