@@ -59,8 +59,8 @@ h1{
     box-sizing: border-box;
     position: absolute;
     left: 0;
-    width: 100px;
-    height: 100px;
+    width: 250px;
+    height: 200px;
     z-index: 0; 
     cursor: pointer;
 }
