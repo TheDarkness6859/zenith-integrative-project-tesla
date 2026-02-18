@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head> 
+<body class="login-body">
+    <div class="container-fluid p-0">
+        <div class="zorra d-flex"><img src="/assets/img/zorrita 2.svg" alt="" ></div>
+        <div class="row w-0 vh-100 g-0  ">
+            
+            <div class="col-12 col-md-7 col-lg-5 col-xl-5 d-flex align-items-center justify-content-center login-section cont-left">
+                
+                <div class="login-box">
+                    
+                    <h1 class="mb-3 text-center">Welcome Back!</h1>
+                    <p class="small text-center mb-5 text-2">Login with Your Account</p>
+                    <form id="loginForm">
+                        
+                        <div class="mb-4">
+                            <label for="loginEmail" class="form-label text-white">Email</label>
+                            <input type="email" pattern="^[^\s@]+@[^\s@]+\.[^\s@]{2,}$" placeholder="Juan@gmail.com" class="form-control  text-white bg-transparent border-0 border-bottom rounded-0" id="loginEmail" required>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="loginPassword" class="form-label text-white">Password</label>
+
+                            <div class="input-group">
+                                <input type="password" placeholder="Password" class="form-control text-white bg-transparent border-0 border-bottom rounded-0" id="loginPassword" required>
+                                <span class="input-group-text bg-transparent border-0 border-bottom rounded-0" id="toggleLoginPassword" style="cursor:pointer;">
+                                    <i class="bi bi-eye-slash text-white" id="loginEyeIcon"></i>
+                                </span>
+                            </div>
+                        </div>
+
+                        <button class="btn btn-join w-100 btn-login mb-5" id="btnLogIn" type="submit">
+                            Log In
+                        </button>
+                        <div class="text-center small mb-4 mt-2">
+                            <p class="text-center small mb-3 text-2">
+                                Don't have account?! 
+                                <a class="border-0 bg-transparent text-decoration-none btn-change" href="/register"> Sign Up</a>
+                            </p>
+                        </div>
+
+                    </form>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+    <div class="card-messages" id="toastMessage"></div>
+    <script type="module" src="/js/auth.js"></script>
+</body>
+</html>

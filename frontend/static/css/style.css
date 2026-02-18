@@ -1,0 +1,208 @@
+*{
+    letter-spacing: 0.70px;
+    font-weight: 615;
+}
+
+:root{
+    --black-color:  #000000ff;
+    --blue-dark-color: #012740;
+    --purple-dark-color: #37023C;
+    --vine-color: rgba(138, 20, 40, 1);
+    --probably-purple: #b72d88;
+    --white-color: rgb(255,255,255);
+    --oficial-color: #08061B;
+    --grey-color: #bbb;
+}
+
+.form-control::placeholder {
+    color: var(--grey-color);
+    opacity: 1; 
+}
+h1{
+    color: var(--white-color);
+    letter-spacing: 0.80px;
+}
+.btn-change{
+    color: var(--grey-color);
+}
+.btn-change:hover{
+    color: var(--oficial-color);
+}
+.btn-join{
+    background-color: var(--oficial-color);
+    color: var(--white-color);
+}
+.btn-join:hover{
+    color: var(--white-color) ;
+    background-color: #1A1833 ;
+    border-color: transparent;
+
+}
+.form-control:focus {
+    outline: none !important;
+    box-shadow: none !important;
+}
+.login-body{
+    background-image: url(../assets/img/zorrita.svg); 
+    background-size: cover;
+    background-position: center;
+    overflow: hidden;
+}
+.register-body{
+    background-image: url(../assets/img/zorrita.svg); 
+    background-size: cover;
+    background-position: center;
+    overflow: hidden;
+}
+.zorra{
+    animation: floatSpace 30s linear infinite;
+    box-sizing: border-box;
+    position: absolute;
+    left: 0;
+    width: 250px;
+    height: 200px;
+    z-index: 0; 
+    cursor: pointer;
+}
+.fade-out {
+    transition: 0.5s ease;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 1000px transparent inset !important; 
+    -webkit-text-fill-color: var(--white-color) !important; 
+    transition: background-color 5000s ease-in-out 0s;
+}
+@keyframes floatSpace {
+    0% {
+        transform: translate(30vw, -50vh) rotate(0deg);
+    }
+    15% {
+        transform: translate(40vw, -25vh) rotate(-8deg);
+    }
+    30% {
+        transform: translate(50vw, 0vh) rotate(-16deg);
+    }
+    45% {
+        transform: translate(60vw, 15vh) rotate(-24deg);
+    }
+    60% {
+        transform: translate(70vw, 30vh) rotate(-32deg);
+    }
+    75% {
+        transform: translate(80vw, 50vh) rotate(-40deg);
+    }
+    85% {
+        transform: translate(90vw, 70vh) rotate(-48deg);
+    }
+    95% { 
+        transform: translate(100vw, 90vh) rotate(-56deg);
+    }
+    100% {
+        transform: translate(100vw, 97vh) rotate(-56deg) ;
+    }
+}
+.text-2{
+    color: var(--white-color);
+    font-size: 16px;
+}
+.form-control{
+    font-weight: 500;
+
+}
+
+
+
+
+.card-messages {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 10000;
+    min-width: 280px;
+    padding: 15px 25px;
+    border-radius: 12px;
+    backdrop-filter: blur(15px);
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    transition: opacity 0.5s, transform 0.5s;
+    opacity: 0;
+    transform: translateX(120%);
+    pointer-events: none;
+}
+.card-messages.active {
+    opacity: 1;
+    transform: translateX(0);
+}
+.msg-success {
+    border-left: 4px solid var(--oficial-color);
+}
+
+.msg-error {
+    border-left: 4px solid var(--vine-color);
+}
+
+.fade-out {
+    opacity: 0 !important;
+    transform: translateX(120%) !important;
+}
+.cont-left{
+    background: rgba(255, 255, 255, 0.08); /* transparencia */
+    backdrop-filter: blur(12px); /* EL EFECTO CLAVE */
+    -webkit-backdrop-filter: blur(12px);
+}
+@media (max-width: 768px) {
+    .zorra img {
+        width: 100px;  
+        height: auto;
+        overflow: hidden;
+    } 
+    .zorra {
+        width: 100px;
+        height: 100px;
+        overflow: hidden;
+    }
+    .login-section {
+        padding: 20px;
+    }
+    .cont-left{
+    background: rgba(255, 255, 255, 0.02); /* transparence */
+    backdrop-filter: blur(3px); /* Effect key */
+    -webkit-backdrop-filter: blur(3px);
+    }
+    .card-messages {
+        right: 10px;
+        left: 10px;
+        top: 15px;
+        min-width: unset;
+        width: auto;
+        padding: 12px 18px;
+        font-size: 14px;
+        border-radius: 10px;
+    }
+}
+
+
+@media (max-width: 480px) {
+    .zorra img {
+        width: 100px;  
+        height: auto;
+        overflow: hidden;
+    } 
+    .zorra {
+        width: 100px;
+        height: 100px;
+        overflow: hidden;
+    }
+    .card-messages {
+        right: 10px;
+        left: 10px;
+        top: 10px;
+        padding: 10px 15px;
+        font-size: 13px;
+    }
+}
