@@ -49,9 +49,18 @@ app.post("/api/auth/register", async (req, res) =>{
 
         const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-        const newUser = "INSERT INTO users (full_name, email, password) VALUES ($1, $2, $3) RETURNING id";
+        // 1. Insertamos el usuario y pedimos que nos devuelva el ID creado
+        const newUserQuery = "INSERT INTO users (full_name, email, password) VALUES ($1, $2, $3) RETURNING id";
+        const result = await db.pool.query(newUserQuery, [full_name, email, hashedPassword]);
+        
+        const newUserId = result.rows[0].id; 
 
-        await db.pool.query(newUser, [full_name, email, hashedPassword]);
+        // CREAMOS EL PERFIL VACÍO PARA ESE USUARIO
+        await db.pool.query("INSERT INTO profile (user_id) VALUES ($1)", [newUserId]);
+
+        // const newUser = "INSERT INTO users (full_name, email, password) VALUES ($1, $2, $3) RETURNING id";
+
+        // await db.pool.query(newUser, [full_name, email, hashedPassword]);
 
         res.status(201).json({ message: "User register" });
 
