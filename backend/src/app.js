@@ -56,7 +56,7 @@ app.post("/api/auth/register", async (req, res) =>{
         const newUserId = result.rows[0].id; 
 
         // CREAMOS EL PERFIL VACÍO PARA ESE USUARIO
-        await db.pool.query("INSERT INTO profile (user_id) VALUES ($1)", [newUserId]);
+        await db.pool.query("INSERT INTO profile (id) VALUES ($1)", [newUserId]);
 
         // const newUser = "INSERT INTO users (full_name, email, password) VALUES ($1, $2, $3) RETURNING id";
 
