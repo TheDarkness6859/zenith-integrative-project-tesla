@@ -9,6 +9,7 @@ import {
     confirmPassword
 } from "./elements.js";
 
+const apiUrl = "http://localhost:4000/api";
 
 /* TOAST SYSTEM */
 
@@ -77,13 +78,14 @@ document.getElementById("toggleConfirmPassword")
 
 
 /* LOGIN HANDLER */
+let port = "http://localhost:4000"
 
 if (loginForm) {
     loginForm.addEventListener("submit", async (e) => {
         e.preventDefault(); // Prevent default form submission
 
         try {
-            const response = await fetch("/api/auth/login", {
+            const response = await fetch(`${port}/api/auth/login`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -103,7 +105,7 @@ if (loginForm) {
 
                 // Redirect after short delay
                 setTimeout(() => {
-                    window.location.href = "/dashboard";
+                    window.location.href = "../../templates/user/profile.html";
                 }, 1500);
 
             } else {
@@ -116,8 +118,6 @@ if (loginForm) {
         }
     });
 }
-
-
 
 /*  REGISTER HANDLER */
 
@@ -141,7 +141,7 @@ if (registerForm) {
         }
 
         try {
-            const response = await fetch("/api/auth/register", {
+            const response = await fetch(`${port}/api/auth/register`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -159,7 +159,7 @@ if (registerForm) {
 
                 // Redirect after short delay
                 setTimeout(() => {
-                    window.location.href = "/";
+                    window.location.href = "../../templates/auth/index.html";
                 }, 1500);
 
             } else {

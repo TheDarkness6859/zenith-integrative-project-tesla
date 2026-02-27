@@ -1,0 +1,173 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="../../static/css/style.css"> 
+
+</head>
+<body style="background-color: rgb(232,228, 222, 0.662);">
+  <div id="footer"> </div>
+    <main class="page">
+      <section class="profile">
+        <button class="profile-edit" type="button" id="edit_profile">Edit Profile</button>
+        <div class="avatar-box">
+          <label class="avatar" for="avatarInput" id="avatar_profile">AC</label>
+          <input id="avatarInput" class="file" type="file" accept="image/*" />
+        </div>
+        <div class="profile-info">
+          <div class="name-row">
+            <h1 id="name_profile">Alex Chen</h1>
+            <span class="chip" id="rol_profile">Expert Developer</span>
+          </div>
+          <p id="description_profile">
+            Senior Full Stack Developer specializing in distributed systems and
+            cloud architecture. Active contributor to 12+ open source
+            repositories.
+          </p>
+          <div class="stats">
+            <div>
+              <span class="label" >Global Rank</span>
+              <span class="value" id="rank">#128</span>
+            </div>
+            <div>
+              <span class="label">Total Points</span>
+              <span class="value" id="points">15,420</span>
+            </div>
+            <div>
+              <span class="label">Achievements</span>
+              <span class="value" id="achievements">42</span>
+            </div>
+            <div>
+              <span class="label">Contribution Streak</span>
+              <span class="value" id="streak">18 Days</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="grid">
+        <div class="trophy-head">
+          <div class="trophy-icon">
+            <i class="bi bi-award"></i>
+          </div>
+          <h2>Featured Trophy</h2>
+        </div>
+        <article class="card trophy">
+          <div class="trophy-body">
+            <div>
+              <div class="trophy-desc">
+                <div class="trophy-badge-wrap">
+                  <i class="trophy-badge bi bi-award" id="insignia"></i>
+                </div>
+                <div class="trophy-content">
+                  <span class="kicker">Legendary Achievement</span>
+                  <h3>Expert Developer</h3>
+                  <p class="text">
+                    Awarded to contributors who consistently deliver high-quality
+                    code and maintain a top 1% global ranking for over 12 consecutive
+                    months.
+                  </p>
+                  <div class="tags">
+                    <span class="tag-label">Earned On</span>
+                    <span class="tag-label">Rarity</span>
+                    <span class="tag-label">Points Gained</span>
+                  </div>
+                  <div class="tags values">
+                    <span class="tag-value">Oct 24, 2023</span>
+                    <span class="tag-value">Top 1%</span>
+                    <span class="tag-value">+5,000 XP</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="card activity">
+          <h2>Recent Activity</h2>
+          <ul class="list">
+            <li>Earned +50 XP for PR Review</li>
+            <li>Legendary Achievement</li>
+            <li>2 hours ago</li>
+            <li>Unlocked React Pro badge</li>
+            <li>Yesterday, 4:15 PM</li>
+            <li>Logged in from San Francisco</li>
+            <li>Aug 12, 10:30 AM</li>
+          </ul>
+        </article>
+      </section>
+
+      <section class="card">
+        <div class="card-head">
+          <h2>Earned Badges</h2>
+          <button class="link" type="button">View All 42 Badges</button>
+        </div>
+        <div class="badges" id="badgeGrid">
+          <div class="badge" data-badge="HTML Master" id="cat_insignia">
+            <span class="badge-icon">
+              <i class="bi bi-terminal" id="img_insignia"></i>
+            </span>
+            <p id="name_insignia">HTML Master</p>
+            <small id="description_insignia">Tier 5 Complete</small>
+          </div>
+          <div class="badge" data-badge="CSS Ninja">
+            <span class="badge-icon">
+              <i class="bi bi-palette"></i>
+            </span>
+            <p>CSS Ninja</p>
+            <small>Legendary Tier</small>
+          </div>
+          <div class="badge" data-badge="JS Architect">
+            <span class="badge-icon">
+              <i class="bi bi-braces"></i>
+            </span>
+            <p>JS Architect</p>
+            <small>Top 5% Performer</small>
+          </div>
+          <div class="badge" data-badge="React Pro">
+            <span class="badge-icon">
+              <i class="bi bi-rocket-takeoff"></i>
+            </span>
+            <p>React Pro</p>
+            <small>Earned 2 months ago</small>
+          </div>
+          <div class="badge" data-badge="SQL Expert">
+            <span class="badge-icon">
+              <i class="bi bi-database"></i>
+            </span>
+            <p>SQL Expert</p>
+            <small>Tier 3 Mastery</small>
+          </div>
+          <div class="badge" data-badge="Bug Hunter">
+            <span class="badge-icon">
+              <i class="bi bi-shield-lock"></i>
+            </span>
+            <p>Bug Hunter</p>
+            <small>50 Issues Solved</small>
+          </div>
+          <div class="badge" data-badge="Cloud Native">
+            <span class="badge-icon">
+              <i class="bi bi-cloud"></i>
+            </span>
+            <p>Cloud Native</p>
+            <small>AWS Specialist</small>
+          </div>
+          <div class="badge" data-badge="Hidden Achievement">
+            <span class="badge-icon">
+              <i class="bi bi-lock"></i>
+            </span>
+            <p>???</p>
+            <small>Hidden Achievement</small>
+          </div>
+        </div>
+      </section>
+    </main>
+    <div id="footer"></div>
+    <script src="../../static/js/profile.js"></script>
+  </body>
+</html>

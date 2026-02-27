@@ -1,5 +1,5 @@
 // 1. Obtener perfil completo (Datos de 'users' + 'profile')
-app.get("/api/user/profile", isLoged, async (req, res) => {
+app.get("/user/profile", isLoged, async (req, res) => {
     const userId = req.cookies.user_session; // Sacamos el ID de la cookie segura
 
     try {
