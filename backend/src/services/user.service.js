@@ -4,7 +4,6 @@ import * as user_session from "../controllers/auth.controller.js";
 // 1. Obtener perfil completo (Datos de 'users' + 'profile')
 const profile = async (userId) => {
     // const userId = req.cookies.user_session; // Sacamos el ID de la cookie segura
-    const userId = user_session.getUserId(); // Sacamos el ID de la cookie segura
 
 
     const query = `
@@ -18,24 +17,43 @@ const profile = async (userId) => {
 };
 
 // 2. Guardar o Actualizar perfil
-const updateProfile = async (userId, full_name, email, description, language, phone, country) => {
-    const userId = req.cookies.user_session;
-    const { full_name, email, description, language, phone, country } = req.body;
+const updateProfile = async (userId, data) => {
+    const { full_name, email, description, language, phone, country, photo } = data;
 
-    // Actualizamos tabla users
-    await pool.query("UPDATE users SET full_name = $1, email = $2 WHERE id = $3", [full_name, email, userId]);
-
-    // Actualizamos o insertamos en tabla profile
-    const queryProfile = `
-        INSERT INTO profile (user_id, description, language, photo, phone, country) 
-        VALUES ($1, $2, $3, $4, $5, $6)
-        ON CONFLICT (user_id) 
-        DO UPDATE SET description = EXCLUDED.description, language = EXCLUDED.language, photo = EXCLUDED.photo, phone = EXCLUDED.phone, country = EXCLUDED.country
-    `;
-    await pool.query(queryProfile, [userId, description, language, photo, phone, country]);
-
-    res.json({ message: "Perfil actualizado con éxito" });
+    // Usamos una transacción para asegurar que ambas tablas se actualicen o ninguna
+    const client = await pool.connect();
     
+    try {
+        await client.query('BEGIN');
+
+        // Actualizamos tabla users
+        await client.query(
+            "UPDATE users SET full_name = $1, email = $2 WHERE id = $3", 
+            [full_name, email, userId]
+        );
+
+        // Actualizamos o insertamos en tabla profile (UPSERT)
+        const queryProfile = `
+            INSERT INTO profile (user_id, description, language, phone, country, photo) 
+            VALUES ($1, $2, $3, $4, $5, $6)
+            ON CONFLICT (user_id) 
+            DO UPDATE SET 
+                description = EXCLUDED.description, 
+                language = EXCLUDED.language, 
+                phone = EXCLUDED.phone, 
+                country = EXCLUDED.country,
+                photo = EXCLUDED.photo
+        `;
+        await client.query(queryProfile, [userId, description, language, phone, country, photo]);
+
+        await client.query('COMMIT');
+        return { success: true };
+    } catch (error) {
+        await client.query('ROLLBACK');
+        throw error;
+    } finally {
+        client.release();
+    }
 }
 
 export { profile, updateProfile };
