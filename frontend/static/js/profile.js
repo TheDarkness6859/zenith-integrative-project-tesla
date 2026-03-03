@@ -41,6 +41,8 @@ if (avatarInput && avatarLabel) { // Valida que existan input y label.
   });
 }
 
+
+// Carga inicial del perfil
 document.addEventListener("DOMContentLoaded", async () => {
     try {
         const response = await fetch('http://localhost:4000/api/user/profile', {
@@ -88,5 +90,63 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     } catch (error) {
         console.error("Error de conexión (el servidor podría estar apagado):", error);
+    }
+});
+
+
+
+
+// Manejo del formulario de edición de perfil
+const editForm = document.getElementById("editProfileForm");
+
+editForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const formData = {
+        full_name: document.getElementById("edit_name")?.value || "",
+        email: document.getElementById("edit_email")?.value || "", 
+        description: document.getElementById("edit_description")?.value || "",
+        language: document.getElementById("edit_language")?.value || "",
+        phone: document.getElementById("edit_phone")?.value || "",     
+        country: document.getElementById("edit_country")?.value || "", 
+        photo: document.getElementById("edit_photo")?.value || ""      
+    };
+
+    // 2. Validación simple antes de enviar
+    if (!formData.full_name || !formData.email) {
+        return alert("El nombre y el email son obligatorios");
+    }
+
+    try {
+        // Bloqueamos el botón para evitar múltiples clics
+        const submitBtn = editForm.querySelector('button[type="submit"]');
+        if(submitBtn) submitBtn.disabled = true;
+
+        const response = await fetch('http://localhost:4000/api/user/profilepost', {
+            method: 'PUT', 
+            headers: { 
+                'Content-Type': 'application/json' 
+            },
+            body: JSON.stringify(formData),
+            credentials: 'include' // Indispensable para que el backend lea la cookie 'usser_sesion'
+        });
+
+        // 3. Manejo de la respuesta
+        const result = await response.json();
+
+        if (response.ok) {
+            alert(result.message || "¡Perfil actualizado con éxito!");
+            window.location.href = "profile.html"; 
+        } else {
+            // Si el servidor mandó un error 401, 400 o 500, lo mostramos
+            alert("Error: " + (result.error || "No se pudo actualizar"));
+            if(submitBtn) submitBtn.disabled = false;
+        }
+
+    } catch (error) {
+        console.error("Error en la petición:", error);
+        alert("Hubo un fallo en la conexión con el servidor");
+        const submitBtn = editForm.querySelector('button[type="submit"]');
+        if(submitBtn) submitBtn.disabled = false;
     }
 });

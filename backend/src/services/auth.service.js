@@ -23,10 +23,10 @@ const registerUser = async (full_name, email, password ) => {
         `;
         
         // Valores por defecto seguros
-        const defaultDescription = "¡Bienvenido a mi perfil!";
+        const defaultDescription = "¡Bienvenido a mi perfil , te invito a que modifiques mi informacion con el boton que esta por aqui -->!";
         const defaultLang = "Spanish";
-        const defaultPhone = "";   // Si esto falla, prueba con null
-        const defaultCountry = ""; // Si esto falla, prueba con null
+        const defaultPhone = "0";   // Si esto falla, prueba con null
+        const defaultCountry = "0"; // Si esto falla, prueba con null
 
         await client.query(profileQuery, [
             userId, 

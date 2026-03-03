@@ -26,7 +26,7 @@
     opacity: 1; 
 }
 h1{
-    color: var(--black-color);
+    color: var(--white-color);
     letter-spacing: 0.80px;
 }
 h2,
@@ -566,7 +566,7 @@ p {
     }
 }
 .text-2{
-    color: var(--black-color);
+    color: var(--white-color);
     font-size: 16px;
 }
 .form-control{

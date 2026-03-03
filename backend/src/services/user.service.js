@@ -33,9 +33,9 @@ const updateProfile = async (userId, data) => {
 
         // Actualizamos o insertamos en tabla profile (UPSERT)
         const queryProfile = `
-            INSERT INTO profile (user_id, description, language, phone, country, photo) 
+            INSERT INTO profile (id, description, language, phone, country, photo) 
             VALUES ($1, $2, $3, $4, $5, $6)
-            ON CONFLICT (user_id) 
+            ON CONFLICT (id) 
             DO UPDATE SET 
                 description = EXCLUDED.description, 
                 language = EXCLUDED.language, 
