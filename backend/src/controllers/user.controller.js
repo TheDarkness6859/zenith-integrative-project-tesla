@@ -6,10 +6,10 @@ import * as userService from '../services/user.service.js';
 const profileUser = async (req, res) => {
     try {
         // Asumiendo que tu middleware de auth pone el ID en req.userId o req.user.id
-        const userId = req.userId || req.user?.id;
-
+        const userId = req.cookies.userId; // Asegúrate de que el nombre coincida con el que pusiste al loguear
+        console.log("ID del usuario desde la cookie:", userId);
         if (!userId) {
-            return res.status(401).json({ error: "No autorizado. Falta el ID de usuario." });
+            return res.status(401).json({ message: "No autorizado" });
         }
 
         const userProfile = await userService.profile(userId);

@@ -10,7 +10,8 @@ const app = express();
 import cors from 'cors';
 
 app.use(cors({
-    origin: 'http://127.0.0.1:5500',
+    // origin: 'http://127.0.0.1:5500',
+    origin: 'http://localhost:5500', // Cambia esto al origen de tu frontend
     credentials: true,               
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization']

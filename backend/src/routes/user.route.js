@@ -1,8 +1,8 @@
-import * as userController from "../controllers/user.controller.js";
+import {profileUser,updateProfileUser} from "../controllers/user.controller.js";
 import express from "express";
 const router = express.Router();
 
-router.get("/profile", userController.profileUser);
-router.post("/profile", userController.updateProfileUser);
+router.get("/profile", profileUser);
+router.post("/profilepost", updateProfileUser);
 
 export default router;

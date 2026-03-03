@@ -1,0 +1,8 @@
+{
+    "git.ignoreLimitWarning": true,
+    "workbench.statusBar.visible": true,
+    "liveServer.settings.NoBrowser": false,
+    "liveServer.settings.fullReload": false,
+    "liveServer.settings.cors": false,
+    "github.copilot.chat.summarizeAgentConversationHistory.enabled": true
+}

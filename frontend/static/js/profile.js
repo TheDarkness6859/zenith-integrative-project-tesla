@@ -4,7 +4,7 @@ const avatarInput = document.querySelector("#avatarInput"); // Captura el input 
 const avatarLabel = document.querySelector(".avatar"); // Referencia al contenedor visual del avatar.
 const footerAvatar = document.querySelector(".footer__avatar"); // Referencia al avatar del footer.
 
-const apiUrl = "http://localhost:4000/api"; // URL base para las peticiones al backend.
+const apiUrl = "http://localhost:4000"; // URL base para las peticiones al backend.
 
 fetch("../partials/navbar.html")
   .then(response => response.text())
@@ -43,56 +43,50 @@ if (avatarInput && avatarLabel) { // Valida que existan input y label.
 
 document.addEventListener("DOMContentLoaded", async () => {
     try {
-        // Hacemos la petición al backend que ya creaste
-        const response = await fetch(`${apiUrl}/user/profile`);
+        const response = await fetch('http://localhost:4000/api/user/profile', {
+            method: "GET",
+            credentials: 'include', // INDISPENSABLE para enviar la cookie 'userId'
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json"
+            }
+        });
+
         if (response.ok) {
             const data = await response.json();
+            console.log("Datos recibidos:", data); // Para debug
 
-            // 1. Reemplazar el nombre (h1)
+            // 1. Nombre
             const nameElem = document.getElementById("name_profile");
-            if (nameElem) {
-                nameElem.textContent = data.full_name || "Usuario";
-            }
+            if (nameElem) nameElem.textContent = data.full_name || "Usuario";
 
-            // 2. Reemplazar el Rol o Lenguaje (span)
+            // 2. Rol/Lenguaje
             const rolElem = document.getElementById("rol_profile");
-            if (rolElem) {
-                rolElem.textContent = data.language || "Developer";
-            }
+            if (rolElem) rolElem.textContent = data.lenguage || "Developer";
 
-            // 3. Reemplazar la Descripción/Bio (p)
+            // 3. Descripción
             const descElem = document.getElementById("description_profile");
-            if (descElem) {
-                descElem.textContent = data.description || "Sin descripción.";
-            }
+            if (descElem) descElem.textContent = data.description || "Sin descripción.";
 
-            // 4. Reemplazar Iniciales del Avatar (label)
+            // 4. Iniciales del Avatar
             const avatarElem = document.getElementById("avatar_profile");
             if (avatarElem && data.full_name) {
-                // Toma las primeras letras del nombre y apellido
                 const initials = data.full_name
                     .split(" ")
+                    .filter(word => word.length > 0) // Evita espacios extra
                     .map(word => word[0])
                     .join("")
                     .toUpperCase();
                 avatarElem.textContent = initials.substring(0, 2);
             }
 
-            // 5. Bonus: Si llega a haber una foto en la DB, la podrías usar así
-            // if (data.photo && avatarElem) {
-            //    avatarElem.style.backgroundImage = `url(${data.photo})`;
-            //    avatarElem.textContent = ""; // Quitamos las letras si hay foto
-            // }
-
+        } else if (response.status === 401) {
+            console.error("Sesión expirada o no iniciada");
+            // window.location.href = "login.html"; // Descomenta cuando funcione
         } else {
-            // Si el backend responde error (ej. no está logueado), redirigir
-            console.error("No se pudo obtener el perfil");
-            //window.location.href = "/index.html";
+            console.error("Error en el servidor:", response.status);
         }
     } catch (error) {
-        console.error("Error de conexión:", error);
+        console.error("Error de conexión (el servidor podría estar apagado):", error);
     }
 });
-  
-
-  

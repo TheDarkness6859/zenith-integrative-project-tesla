@@ -44,9 +44,10 @@ const login = async (req, res) => {
         // Caso: Contraseña correcta
         if (result.match) {
             // Guardamos el ID en una cookie segura
-            res.cookie("user_session", result.userFound.id, {
+            res.cookie("userId", result.userFound.id, {
                 httpOnly: true,
-                secure: process.env.NODE_ENV === "production", // Solo HTTPS en producción
+                // secure: process.env.NODE_ENV === "production", // Solo HTTPS en producción
+                secure: false, // Para desarrollo sin HTTPS
                 sameSite: "lax",
                 maxAge: 2 * 60 * 60 * 1000 // 2 horas
             });

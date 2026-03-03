@@ -5,11 +5,10 @@ import * as user_session from "../controllers/auth.controller.js";
 const profile = async (userId) => {
     // const userId = req.cookies.user_session; // Sacamos el ID de la cookie segura
 
-
     const query = `
-        SELECT u.full_name, u.email, p.description, p.language, p.photo
+        SELECT u.full_name,u.email, profile.description, profile.lenguage, profile.photo
         FROM users u
-        LEFT JOIN profile p ON u.id = p.user_id 
+        LEFT JOIN profile ON u.id = profile.id
         WHERE u.id = $1
     `;
     const result = await pool.query(query, [userId]);

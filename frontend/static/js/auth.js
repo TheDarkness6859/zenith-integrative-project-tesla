@@ -87,6 +87,7 @@ if (loginForm) {
         try {
             const response = await fetch(`${port}/api/auth/login`, {
                 method: "POST",
+                credentials: 'include',
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     email: email.value,
@@ -143,6 +144,7 @@ if (registerForm) {
         try {
             const response = await fetch(`${port}/api/auth/register`, {
                 method: "POST",
+                credentials: 'include',
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     full_name: registerName.value,
