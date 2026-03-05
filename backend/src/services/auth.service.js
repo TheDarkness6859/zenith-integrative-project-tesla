@@ -18,8 +18,8 @@ const registerUser = async (full_name, email, password ) => {
 
     
         const profileQuery = `
-            INSERT INTO profile (id, description, lenguage, phone, country) 
-            VALUES ($1, $2, $3, $4, $5)
+            INSERT INTO profile (id, description, lenguage, phone, country, photo) 
+            VALUES ($1, $2, $3, $4, $5, $6)
         `;
         
         // Valores por defecto seguros
@@ -27,13 +27,15 @@ const registerUser = async (full_name, email, password ) => {
         const defaultLang = "Spanish";
         const defaultPhone = "0";   // Si esto falla, prueba con null
         const defaultCountry = "0"; // Si esto falla, prueba con null
+        const defaultPhoto = "";    // Si esto falla, prueba con null
 
         await client.query(profileQuery, [
             userId, 
             defaultDescription, 
             defaultLang, 
             defaultPhone, 
-            defaultCountry
+            defaultCountry,
+            defaultPhoto
         ]);
 
         await client.query('COMMIT');

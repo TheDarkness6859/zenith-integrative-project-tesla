@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Profile</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../static/css/style.css"> 
+</head>
+<body class="register-body edit-profile-body">
+    <div class="container-fluid p-0">
+        <div class="row min-vh-100 g-0 align-items-center">
+            <div class="col-12 col-lg-6 mx-auto">
+                <div class="register-box w-100 px-3 px-md-4 cont-left rounded-4">
+                    
+                    <h1 class="mb-3 text-center text-white">Edit Profile</h1>
+                    <p class="small text-center mb-4 text-2 text-white">Update your information</p>
+                    <form id="editProfileForm">
+                        <div class="mb-3">
+                            <label for="editName" class="form-label text-white">Name</label>
+                            <input type="text" placeholder="name" class="form-control text-white w-100 bg-transparent border-0 border-bottom rounded-0" id="editName" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="editLastName" class="form-label text-white">Lastname</label>
+                            <input type="text" placeholder="Lastname" class="form-control text-white w-100 bg-transparent border-0 border-bottom rounded-0" id="editLastName" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="editEmail" class="form-label text-white">Email address</label>
+                            <input type="email" pattern="^[^\s@]+@[^\s@]+\.[^\s@]{2,}$" placeholder="email@example.com" class="form-control text-white w-100 bg-transparent border-0 border-bottom rounded-0" id="editEmail" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="editCity" class="form-label text-white">City</label>
+                            <input type="text" placeholder="City" class="form-control text-white w-100 bg-transparent border-0 border-bottom rounded-0" id="editCity">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="editCountry" class="form-label text-white">County</label>
+                            <select id="editCountry" class="form-select text-white w-100 bg-transparent border-0 border-bottom rounded-0">
+                                <option value="" selected>Colombia</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="description" class="form-label text-white">Description</label>
+                            <textarea id="description" rows="4" class="form-control text-white w-100 bg-transparent border-0 border-bottom rounded-0" placeholder="Tell us about yourself"></textarea>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="userImage" class="form-label text-white">Photo profile</label>
+                            <div class="custom-file-input-wrapper border-bottom rounded-0">
+                                <input type="file" id="userImage" class="custom-file-input" accept="image/*">
+                                <label for="userImage" class="custom-file-label text-white">Choose file</label>
+                                <span id="userImageFileName" class="custom-file-name text-white">No file chosen</span>
+                            </div>
+                        </div>
+
+                        <button class="btn btn-join w-100 mt-4 mb-2" id="btnSaveProfile" type="submit">
+                            Save changes
+                        </button>
+                        <div class="text-center small mb-4 mt-3">
+                            <p class="text-center small mt-1 text-3 text-white">
+                                Return
+                                <a class="border-0 bg-transparent text-decoration-none btn-change" href="/">Start</a>
+                            </p>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div id="toastMessage" class="card-messages"></div>
+    <script type="module" src="../../static/js/Edit_profile.js"></script>
+</body>
+</html>

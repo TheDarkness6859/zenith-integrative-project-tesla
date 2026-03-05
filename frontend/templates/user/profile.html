@@ -7,17 +7,19 @@
     <title>Profile</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="../../static/css/style.css"> 
+    <link rel="stylesheet" href="../../static/css/style.css">
+    
 
 </head>
 <body style="background-color: rgb(232,228, 222, 0.662);">
-  <div id="footer"> </div>
-    <main class="page">
+    <main class="page" id="profileView">
       <section class="profile">
-        <button class="profile-edit" type="button" id="edit_profile">Edit Profile</button>
+        <button class="profile-edit" type="checkbox" id="edit_profile">Edit Profile</button>
         <div class="avatar-box">
-          <label class="avatar" for="avatarInput" id="avatar_profile">AC</label>
-          <input id="avatarInput" class="file" type="file" accept="image/*" />
+          <label class="avatar" >
+            <img id="main_avatar_img" src="" style="display:none; width:100%; height:100%; border-radius:10%; object-fit:cover;">
+            <span id="avatar_profile">AC</span>
+          </label>
         </div>
         <div class="profile-info">
           <div class="name-row">
@@ -167,6 +169,62 @@
         </div>
       </section>
     </main>
+    <section id="editSection" style="display: none;" class="edit-profile-body py-5">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-12 col-lg-8">
+                    <div class="register-box p-4 cont-left rounded-4" style="background: rgba(0,0,0,0.8);">
+                        <h1 class="mb-3 text-center text-white">Edit Profile</h1>
+                        <form id="editProfileForm">
+                          <div class="mb-3">
+                              <label class="text-white">Full Name</label>
+                              <input type="text" id="edit_name" class="form-control bg-transparent text-white border-0 border-bottom rounded-0" required>
+                          </div>
+                          <div class="mb-3">
+                              <label class="text-white">Email</label>
+                              <input type="email" id="edit_email" class="form-control bg-transparent text-white border-0 border-bottom rounded-0" required>
+                          </div>
+
+                          <div class="mb-3">
+                              <label class="text-white">Description</label>
+                              <textarea id="edit_description" class="form-control bg-transparent text-white border-0 border-bottom rounded-0" rows="3"></textarea>
+                          </div>
+
+                          <div class="row">
+                              <div class="col-md-6 mb-3">
+                                  <label class="text-white">Lenguage</label> <input type="text" id="edit_lenguage" class="form-control bg-transparent text-white border-0 border-bottom rounded-0">
+                              </div>
+                              <div class="col-md-6 mb-3">
+                                  <label class="text-white">Phone</label>
+                                  <input type="text" id="edit_phone" class="form-control bg-transparent text-white border-0 border-bottom rounded-0">
+                              </div>
+                          </div>
+
+                          <div class="mb-3">
+                              <label class="text-white">Country</label>
+                              <input type="text" id="edit_country" class="form-control bg-transparent text-white border-0 border-bottom rounded-0">
+                          </div>
+
+                              <div class="mb-4">
+                                <label class="form-label text-white">Profile photo</label>
+                                <div class="avatar-box">
+                                  <label class="avatar" for="edit_photo">
+                                    <img id="edit_avatar_preview" src="" style="display:none; width:100%; height:100%; border-radius:50%; object-fit:cover;">
+                                    <span id="edit_avatar_text">PF</span>
+                                  </label> 
+                                  <input id="edit_photo" for ="avatar_profile"class="file" type="file" accept="image/*" />
+                                </div>
+                              </div>
+
+                          <div class="d-flex gap-3">
+                              <button type="submit" class="btn btn-primary flex-grow-1">Save Changes</button>
+                              <button type="button" id="cancelEdit" class="btn btn-outline-light flex-grow-1">Cancel</button>
+                          </div>
+                      </form>
+                </div>
+            </div>
+        </div>
+    </section>
     <div id="footer"></div>
     <script src="../../static/js/profile.js"></script>
   </body>

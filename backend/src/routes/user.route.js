@@ -3,6 +3,6 @@ import express from "express";
 const router = express.Router();
 
 router.get("/profile", profileUser);
-router.post("/profilepost", updateProfileUser);
+router.put("/profileput", updateProfileUser);
 
 export default router;

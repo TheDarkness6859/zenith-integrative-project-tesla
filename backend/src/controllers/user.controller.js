@@ -29,7 +29,7 @@ const profileUser = async (req, res) => {
  */
 const updateProfileUser = async (req, res) => {
     try {
-        const userId = req.cookies.usserId; 
+        const userId = req.cookies.userId; 
 
         if (!userId) {
             return res.status(401).json({ error: "No autorizado" });
