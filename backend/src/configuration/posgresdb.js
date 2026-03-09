@@ -26,28 +26,8 @@ const pool = new Pool({
   database: process.env.DB_NAME,
   password: process.env.DB_PASSWORD,
   port: process.env.DB_PORT,
+  options: `-c search_path=${process.env.DB_SCHEMA || 'public'},public`
 });
-
-pool.on("connect", async (client) =>{
-  const schema = process.env.DB_SCHEMA || "public";
-
-  if (!/^[a-zA-Z_][a-zA-Z0-9_]*$/.test(schema)) {
-    console.error("The name of schema is invalid");
-    return;
-  }
-
-  try {
-
-    await client.query(`SET search_path TO "${schema}", public`)
-
-  } catch (error) {
-
-    console.error("Error to config search_path:", error.message)
-
-  }
-  
-  
-}) 
 
 export const connectPg = async () => {
 
@@ -63,7 +43,6 @@ export const connectPg = async () => {
   } catch (error) {
     
     console.error('Error connection to PostgreSQL:', error.stack);
-    throw error; 
     
   }finally{
 
