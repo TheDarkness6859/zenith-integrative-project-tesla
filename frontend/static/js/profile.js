@@ -4,7 +4,7 @@ const avatarInput = document.querySelector("#avatarInput"); // Captura el input 
 const avatarLabel = document.querySelector(".avatar"); // Referencia al contenedor visual del avatar.
 const footerAvatar = document.querySelector(".footer__avatar"); // Referencia al avatar del footer.
 
-const apiUrl = "http://localhost:4000"; // URL base para las peticiones al backend.
+const port = "http://localhost:4000"; // URL base para las peticiones al backend.
 
 fetch("../partials/navbar.html")
   .then(response => response.text())
@@ -45,7 +45,7 @@ if (avatarInput && avatarLabel) { // Valida que existan input y label.
 // Carga inicial del perfil
 document.addEventListener("DOMContentLoaded", async () => {
     try {
-        const response = await fetch('http://localhost:4000/api/user/profile', {
+        const response = await fetch(`${port}/api/user/profile`, {
             method: "GET",
             credentials: 'include', // INDISPENSABLE para enviar la cookie 'userId'
             headers: {
@@ -83,13 +83,20 @@ document.addEventListener("DOMContentLoaded", async () => {
             }
 
         } else if (response.status === 401) {
-            console.error("Sesión expirada o no iniciada");
-            // window.location.href = "login.html"; // Descomenta cuando funcione
+
+            console.warn("Session expired. Redirecting to login...");
+            window.location.href = "/frontend/templates/auth/index.html";
+            return;
+
         } else {
-            console.error("Error en el servidor:", response.status);
+
+            console.error("Server error:", response.status);
+
         }
     } catch (error) {
-        console.error("Error de conexión (el servidor podría estar apagado):", error);
+
+        console.error("Connection error (Server might be down):", error);
+
     }
 });
 
@@ -145,7 +152,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     // --- 3. CARGAR DATOS (CUANDO ABRES LA PÁGINA) ---
     async function loadInitialData() {
         try {
-            const res = await fetch('http://localhost:4000/api/user/profile', { credentials: 'include' });
+            const res = await fetch(`${port}/api/user/profile`, { credentials: 'include' });
             if (res.ok) {
                 const user = await res.json();
                 

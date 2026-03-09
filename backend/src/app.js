@@ -1,17 +1,16 @@
 import express from "express";
 import cookieParser from "cookie-parser"
+import cors from 'cors';
 import authRoutes from "./routes/auth.routes.js"
-import userRoutes from "./routes/user.route.js"
+import userRoutes from "./routes/user.routes.js"
 
 const app = express();
-
-import cors from 'cors';
 
 app.use(cors({
     origin: 'http://localhost:5500',
     credentials: true,               
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization']
+    allowedHeaders: ['Content-Type', 'Authorization', 'Accept']
 }));
 
 //Allow that express can read json.

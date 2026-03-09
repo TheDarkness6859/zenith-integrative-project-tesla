@@ -8,7 +8,7 @@ const profileUser = async (req, res) => {
         const userProfile = await userService.profile(userId); 
 
         if (!userProfile) {
-            return res.status(401).json({ message: "not found user" });
+            return res.status(404).json({ message: "profile data not found user" });
         }
 
         res.status(200).json(userProfile);
