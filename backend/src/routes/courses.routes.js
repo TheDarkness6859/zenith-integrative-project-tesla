@@ -4,6 +4,11 @@ import { isLoged } from "../middleware.js";
 
 const courseRoutes = express.Router();
 
+courseRoutes.get("/categories", isLoged, coursesControllers.getCategories);
+
+courseRoutes.get("/games", isLoged, coursesControllers.getGames);
+
+
 courseRoutes.get("/", isLoged, coursesControllers.getCourses);
 
 courseRoutes.post("/", isLoged, coursesControllers.postCourse);

@@ -5,13 +5,48 @@ export const coursesServices = {
     get: async (userId) => {
 
         try {
+
             const query = "SELECT * FROM get_user_course ($1)";
             const res = await pool.query(query, [userId]);
             return res.rows;
             
         } catch (error) {
             
-            console.error("Error to get the courses of th user", error);
+            console.error("Error to get the courses of the user", error);
+            throw error;
+
+        }
+
+    },
+
+    getC: async () => {
+
+        try {
+        
+            const query = "SELECT id, name FROM course_category ORDER BY name ASC";
+            const res = await pool.query(query);
+            return res.rows;
+
+        } catch (error) {
+            
+            console.error("Error to get the categories of course_category", error);
+            throw error;
+
+        }
+
+    },
+
+    getG: async () => {
+
+        try {
+        
+            const query = "SELECT id, name FROM game_catalog ORDER BY name ASC";
+            const res = await pool.query(query);
+            return res.rows;
+
+        } catch (error) {
+            
+            console.error("Error to get the categories of game_catalog", error);
             throw error;
 
         }
