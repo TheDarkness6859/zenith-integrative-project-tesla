@@ -186,7 +186,7 @@ body {
 }
 
 .trophy-badge {
-  color: var(--primary);
+  color: var(--white-color);
   font-size: 220px !important;
   line-height: 1;
   display: block;

@@ -41,12 +41,15 @@ h1,h2,h3{
     letter-spacing:0.80px;
 }
 
+.text-2{
+    color: var(--grey-color);
+}
 /* ===============================
 BUTTONS
 =============================== */
 
 .btn-change{
-    color:var(--grey-color);
+    color:var(--white-color);
 }
 
 .btn-change:hover{
