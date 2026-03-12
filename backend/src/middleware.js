@@ -1,22 +1,36 @@
 const isLoged = (req, res, next) => {
 
-    const userSession = req.cookies.user_session;
+    const userId = req.cookies.user_session;
 
-    if(userSession){
+    if(userId){
+
+        req.userId = userId;
         return next();
+
     }else{
-        return res.redirect("/");
+
+        return res.status(401).json({ message: "No session found" });
+    
     }
 }
 
-const isGuest = (req, res, next) => {
-    const userSession = req.cookies.user_session;
+    const isGuest = (req, res, next) => {
 
-    if(userSession){
-        return res.redirect("/dashboard")
-    }else{
-        return next()
+        const userSession = req.cookies.user_session;
+
+        if(userSession){
+
+            if(req.headers.accept && req.headers.accept.includes('application/json')){
+
+                return res.status(403).json({message: "acces denied: You are logged in"})
+
+            }
+
+        }else{
+
+            return next()
+
+        }
     }
-}
 
 export {isLoged, isGuest}

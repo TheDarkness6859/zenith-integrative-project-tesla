@@ -4,7 +4,7 @@ const avatarInput = document.querySelector("#avatarInput"); // Captura el input 
 const avatarLabel = document.querySelector(".avatar"); // Referencia al contenedor visual del avatar.
 const footerAvatar = document.querySelector(".footer__avatar"); // Referencia al avatar del footer.
 
-const apiUrl = "http://localhost:4000"; // URL base para las peticiones al backend.
+const port = "http://127.0.0.1:4000"; // URL base para las peticiones al backend.
 
 fetch("../partials/navbar.html")
   .then(response => response.text())
@@ -45,7 +45,7 @@ if (avatarInput && avatarLabel) { // Valida que existan input y label.
 // Carga inicial del perfil
 document.addEventListener("DOMContentLoaded", async () => {
     try {
-        const response = await fetch('http://localhost:4000/api/user/profile', {
+        const response = await fetch(`${port}/api/user/profile`, {
             method: "GET",
             credentials: 'include', // INDISPENSABLE para enviar la cookie 'userId'
             headers: {
@@ -64,11 +64,13 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             // 2. Rol/Lenguaje
             const rolElem = document.getElementById("rol_profile");
-            if (rolElem) rolElem.textContent = data.lenguage || "Developer";
+            if (rolElem) rolElem.textContent = data.language || "Developer";
 
             // 3. Descripción
             const descElem = document.getElementById("description_profile");
             if (descElem) descElem.textContent = data.description || "Sin descripción.";
+
+            
 
             // 4. Iniciales del Avatar
             const avatarElem = document.getElementById("avatar_profile");
@@ -83,13 +85,20 @@ document.addEventListener("DOMContentLoaded", async () => {
             }
 
         } else if (response.status === 401) {
-            console.error("Sesión expirada o no iniciada");
-            // window.location.href = "login.html"; // Descomenta cuando funcione
+
+            console.warn("Session expired. Redirecting to login...");
+            window.location.href = "/frontend/templates/auth/index.html";
+            return;
+
         } else {
-            console.error("Error en el servidor:", response.status);
+
+            console.error("Server error:", response.status);
+
         }
     } catch (error) {
-        console.error("Error de conexión (el servidor podría estar apagado):", error);
+
+        console.error("Connection error (Server might be down):", error);
+
     }
 });
 
@@ -145,14 +154,20 @@ document.addEventListener("DOMContentLoaded", async () => {
     // --- 3. CARGAR DATOS (CUANDO ABRES LA PÁGINA) ---
     async function loadInitialData() {
         try {
-            const res = await fetch('http://localhost:4000/api/user/profile', { credentials: 'include' });
+            const res = await fetch(`${port}/api/user/profile`, { credentials: 'include' });
             if (res.ok) {
                 const user = await res.json();
                 
                 // Actualizamos nombre y descripción
                 document.getElementById("name_profile").textContent = user.full_name;
                 document.getElementById("description_profile").textContent = user.description || "Sin descripción";
-                
+                document.getElementById("rol_profile").textContent = user.language ;
+                const phoneElem = document.getElementById("phone");
+                if (phoneElem) phoneElem.textContent = user.phone;
+
+                const countryElem = document.getElementById("country");
+                if (countryElem) countryElem.textContent = user.country;
+
                 // --- LÓGICA DEL AVATAR (MOSTRAR U OCULTAR) ---
                 const mainImg = document.getElementById("main_avatar_img");
                 const mainSpan = document.getElementById("avatar_profile");
@@ -174,9 +189,11 @@ document.addEventListener("DOMContentLoaded", async () => {
                 document.getElementById("edit_name").value = user.full_name || "";
                 document.getElementById("edit_email").value = user.email || "";
                 document.getElementById("edit_description").value = user.description || "";
-                document.getElementById("edit_lenguage").value = user.lenguage || "";
+                document.getElementById("edit_lenguage").value = user.language || "";
                 document.getElementById("edit_phone").value = user.phone || "";
                 document.getElementById("edit_country").value = user.country || "";
+
+        
             }
         } catch (err) { 
             console.error("Error al cargar datos:", err); 
@@ -204,7 +221,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             full_name: document.getElementById("edit_name").value,
             email: document.getElementById("edit_email").value,
             description: document.getElementById("edit_description").value,
-            lenguage: document.getElementById("edit_lenguage").value,
+            language: document.getElementById("edit_lenguage").value,
             phone: document.getElementById("edit_phone").value,
             country: document.getElementById("edit_country").value,
             // Si subió una foto nueva mandamos esa, si no, mandamos lo que ya había
@@ -212,7 +229,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         };
 
         try {
-            const response = await fetch('http://localhost:4000/api/user/profileput', {
+            const response = await fetch(`${port}/api/user/profileput`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData),

@@ -1,48 +1,41 @@
 import * as userService from '../services/user.service.js';
 
-/**
- * Obtiene el perfil del usuario actual
- */
+
 const profileUser = async (req, res) => {
     try {
-        // Asumiendo que tu middleware de auth pone el ID en req.userId o req.user.id
-        const userId = req.cookies.userId; // Asegúrate de que el nombre coincida con el que pusiste al loguear
-        if (!userId) {
-            return res.status(401).json({ message: "No autorizado" });
-        }
 
-        const userProfile = await userService.profile(userId);
+        const userId = req.userId;
+        const userProfile = await userService.profile(userId); 
 
         if (!userProfile) {
-            return res.status(404).json({ error: "Usuario no encontrado" });
+            return res.status(404).json({ message: "profile data not found user" });
         }
 
         res.status(200).json(userProfile);
+        
     } catch (error) {
-        console.error("Error en profileUser:", error);
-        res.status(500).json({ error: "Error al obtener el perfil" });
+
+        console.error("Error in profileUser:", error);
+        res.status(500).json({ error: "Error to get the profile" });
+        
     }
 };
 
-/**
- * Actualiza el perfil del usuario actual
- */
+
 const updateProfileUser = async (req, res) => {
     try {
-        const userId = req.cookies.userId; 
 
-        if (!userId) {
-            return res.status(401).json({ error: "No autorizado" });
-        }
+        const userId = req.userId; 
 
-        // El servicio espera (userId, dataObject). 
-        // req.body contiene: full_name, email, description, language, phone, country, photo
         await userService.updateProfile(userId, req.body);
 
-        res.status(200).json({ message: "Perfil actualizado con éxito" });
+        res.status(200).json({ message: "profile updated correctly" });
+
     } catch (error) {
-        console.error("Error en updateProfileUser:", error);
-        res.status(500).json({ error: "Error al actualizar el perfil" });
+
+        console.error("Error in updateProfileUser:", error);
+        res.status(500).json({ error: "Error to update profile" });
+
     }
 };
 

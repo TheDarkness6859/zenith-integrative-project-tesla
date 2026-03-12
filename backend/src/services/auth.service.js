@@ -1,4 +1,4 @@
-import {pool} from "../db.js"
+import pool from "../configuration/posgresdb.js"
 import bcrypt from "bcrypt";
 
 
@@ -18,7 +18,7 @@ const registerUser = async (full_name, email, password ) => {
 
     
         const profileQuery = `
-            INSERT INTO profile (id, description, lenguage, phone, country, photo) 
+            INSERT INTO profile (id, description, language, phone, country, photo) 
             VALUES ($1, $2, $3, $4, $5, $6)
         `;
         
@@ -43,6 +43,7 @@ const registerUser = async (full_name, email, password ) => {
 
     } catch (error) {
         await client.query('ROLLBACK');
+        console.error(error.message)
         throw error; 
     } finally {
         client.release();

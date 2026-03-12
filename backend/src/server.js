@@ -1,14 +1,27 @@
 #!/usr/bin/env node
 import app from "./app.js";
-import dotenv from "dotenv";
-import path from "path";
+import "dotenv/config"
+import { connectPg } from "./configuration/posgresdb.js";
 
-dotenv.config({ 
-    path: path.resolve(process.cwd(), "backend/.env") 
-});
 
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.APP_PORT || 4000;
 
-app.listen(PORT, () =>{
-    console.log(`Join to the website: http://localhost:${PORT}`);
-});
+const startServer = async () => {
+
+    try {
+        
+        await connectPg();
+
+        app.listen(PORT, () =>{
+        console.log(`Join to the website: http://localhost:${PORT}`);
+        });
+
+    } catch (error) {
+        
+        console.error("Fail", error)
+
+    }
+
+}
+
+startServer()

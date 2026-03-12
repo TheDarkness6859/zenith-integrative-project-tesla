@@ -11,7 +11,7 @@
     
 
 </head>
-<body style="background-color: rgb(232,228, 222, 0.662);">
+<body class="b">
     <main class="page" id="profileView">
       <section class="profile">
         <button class="profile-edit" type="checkbox" id="edit_profile">Edit Profile</button>
@@ -24,27 +24,27 @@
         <div class="profile-info">
           <div class="name-row">
             <h1 id="name_profile"> </h1>
-            <span class="chip" id="rol_profile"></span>
+            <span class="chip text-white" id="rol_profile"></span>
           </div>
-          <p id="description_profile">
-           
+          <p id="description_profile" class="text-white">
+            
           </p>
           <div class="stats">
             <div>
-              <span class="label" >Global Rank</span>
-              <span class="value" id="rank"></span>
+              <span class="label text-white" >Phone</span>
+              <span class="value" id="phone"></span>
             </div>
             <div>
-              <span class="label">Total Points</span>
-              <span class="value" id="points"></span>
+              <span class="label text-white">Country</span>
+              <span class="value " id="country"></span>
             </div>
             <div>
-              <span class="label">Achievements</span>
-              <span class="value" id="achievements"></span>
+              <span class="label text-white">Achievements</span>
+              <span class="value text-white" id="achievements"></span>
             </div>
             <div>
-              <span class="label">Contribution Streak</span>
-              <span class="value" id="streak"></span>
+              <span class="label text-white">Total Points</span>
+              <span class="value text-white" id="points"></span>
             </div>
           </div>
         </div>
@@ -55,10 +55,10 @@
           <div class="trophy-icon">
             <i class="bi bi-award"></i>
           </div>
-          <h2>Featured Trophy</h2>
+          <h2 class="text-white">Featured Trophy</h2>
         </div>
-        <article class="card trophy">
-          <div class="trophy-body">
+        <article class="card trophy ">
+          <div class="trophy-body ">
             <div>
               <div class="trophy-desc">
                 <div class="trophy-badge-wrap">
@@ -66,18 +66,17 @@
                 </div>
                 <div class="trophy-content">
                   <span class="kicker">Legendary Achievement</span>
-                  <h3></h3>
-                  <p class="text">
-                   
+                  <h3 id="name_insignia" class="name-insignia text-white"></h3>
+
                   <div class="tags">
-                    <span class="tag-label">Earned On</span>
-                    <span class="tag-label">Rarity</span>
-                    <span class="tag-label">Points Gained</span>
+                    <span class="tag-label text-white">Earned On</span>
+                    <span class="tag-label text-white">Rarity</span>
+                    <span class="tag-label text-white">Points Gained</span>
                   </div>
                   <div class="tags values">
-                    <span class="tag-value"></span>
-                    <span class="tag-value"></span>
-                    <span class="tag-value"></span>
+                    <span class="tag-value text-white"></span>
+                    <span class="tag-value text-white"></span>
+                    <span class="tag-value text-white"></span>
                   </div>
                 </div>
               </div>
@@ -86,8 +85,8 @@
         </article>
 
         <article class="card activity">
-          <h2>Recent Activity</h2>
-          <ul class="list">
+          <h2 class="text-white">Recent Activity</h2>
+          <ul class="list text-white" id="activityList">
             <li></li>
             <li></li>
             <li></li>
@@ -101,7 +100,7 @@
 
       <section class="card">
         <div class="card-head">
-          <h2>Earned Badges</h2>
+          <h2 class="text-white">Earned Badges</h2>
           <button class="link" type="button">View All Badges</button>
         </div>
         <div class="badges" id="badgeGrid">
@@ -109,8 +108,8 @@
             <span class="badge-icon">
               <i class="bi bi-terminal" id="img_insignia"></i>
             </span>
-            <p id="name_insignia">HTML Master</p>
-            <small id="description_insignia">Tier 5 Complete</small>
+            <p id="name_insignia " class="text-white">HTML Master</p>
+            <small id="description_insignia" class="text-white">Tier 5 Complete</small>
           </div>
           
          
@@ -120,7 +119,7 @@
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-12 col-lg-8">
-                    <div class="register-box p-4 cont-left rounded-4" style="background: rgba(0,0,0,0.8);">
+                    <div class="register-box p-4 cont-left rounded-4" style="background: rgba(255, 255, 255, 0.05);">
                         <h1 class="mb-3 text-center text-white">Edit Profile</h1>
                         <form id="editProfileForm">
                           <div class="mb-3">
@@ -139,7 +138,7 @@
 
                           <div class="row">
                               <div class="col-md-6 mb-3">
-                                  <label class="text-white">Lenguage</label> <input type="text" id="edit_lenguage" class="form-control bg-transparent text-white border-0 border-bottom rounded-0">
+                                  <label class="text-white">Rol</label> <input type="text" id="edit_lenguage" class="form-control bg-transparent text-white border-0 border-bottom rounded-0">
                               </div>
                               <div class="col-md-6 mb-3">
                                   <label class="text-white">Phone</label>

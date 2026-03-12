@@ -9,7 +9,25 @@ import {
     confirmPassword
 } from "./elements.js";
 
-const apiUrl = "http://localhost:4000/api";
+const port = "http://127.0.0.1:4000"
+
+document.addEventListener("DOMContentLoaded", async () => {
+    try {
+        const response = await fetch(`${port}/api/user/profile`, {
+            method: "GET",
+            credentials: 'include'
+        });
+
+        if (response.ok) {
+            console.info("detected sesion redirect to profile...");
+            window.location.href = "../../templates/user/profile.html";
+        }
+    } catch (error) {
+        
+        console.log("No hay sesión activa o el servidor está caído.");
+
+    }
+});
 
 /* TOAST SYSTEM */
 
@@ -63,22 +81,20 @@ function togglePassword(inputId, iconId) {
 document.getElementById("toggleLoginPassword")
     ?.addEventListener("click", () =>
         togglePassword("loginPassword", "loginEyeIcon")
-    );
+);
 
 // Register toggles
 document.getElementById("toggleRegisterPassword")
     ?.addEventListener("click", () =>
         togglePassword("registerPassword", "registerEyeIcon")
-    );
+);
 
 document.getElementById("toggleConfirmPassword")
     ?.addEventListener("click", () =>
         togglePassword("confirmRegisterPassword", "confirmEyeIcon")
-    );
-
+);
 
 /* LOGIN HANDLER */
-let port = "http://localhost:4000"
 
 if (loginForm) {
     loginForm.addEventListener("submit", async (e) => {
@@ -106,7 +122,7 @@ if (loginForm) {
 
                 // Redirect after short delay
                 setTimeout(() => {
-                    window.location.href = "../../templates/user/profile.html";
+                    window.location.href = "../../templates/dashboard/dashboard.html";
                 }, 1500);
 
             } else {

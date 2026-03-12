@@ -1,31 +1,27 @@
-import express from "express"
+import express from "express";
 import cookieParser from "cookie-parser"
+import cors from 'cors';
 import authRoutes from "./routes/auth.routes.js"
-import userRoutes from "./routes/user.route.js"
-import { fileURLToPath } from 'url';
+import userRoutes from "./routes/user.routes.js"
+import courseRoutes from "./routes/courses.routes.js";
 
 const app = express();
 
-import cors from 'cors';
-
 app.use(cors({
-    // origin: 'http://127.0.0.1:5500',
-    origin: 'http://localhost:5500', // Cambia esto al origen de tu frontend
+    origin: 'http://127.0.0.1:5500',
     credentials: true,               
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization']
+    allowedHeaders: ['Content-Type', 'Authorization', 'Accept']
 }));
 
-//Create a instance.    
-
-
-//Allow that express can read json 
-// app.use(express.json());
+//Allow that express can read json.
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ limit: '10mb', extended: true }));
 app.use(cookieParser());
 
+//Route url.
 app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
+app.use('/api/courses', courseRoutes)
 
 export default app;
