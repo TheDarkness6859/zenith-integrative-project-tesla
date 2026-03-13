@@ -12,6 +12,9 @@ export const confirmPassword = document.getElementById("confirmRegisterPassword"
 
 // COURSES
 
+//Body
+export const workS = document.getElementById("main-Body")
+
 //Buttons
 export const btnCreate = document.getElementById("btn-Create");
 export const btnBack = document.getElementById("btn-Close");

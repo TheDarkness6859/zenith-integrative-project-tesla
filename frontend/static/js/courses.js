@@ -1,4 +1,4 @@
-import { btnBack, btnCreate, modalCourses, coverCourseIn, previewImg, placeHolder, courseTitle, courseDesc, moduleCont, btnModule, coursePublic, cateSelect, gameSelect, submitBtn, modalTitle} from "./elements.js";
+import { btnBack, btnCreate, modalCourses, coverCourseIn, previewImg, placeHolder, courseTitle, courseDesc, moduleCont, btnModule, coursePublic, cateSelect, gameSelect, submitBtn, modalTitle, workS} from "./elements.js";
 
 const port = "http://127.0.0.1:4000/api/courses";
 
@@ -7,28 +7,25 @@ const port = "http://127.0.0.1:4000/api/courses";
 let courseData = null;
 
 let myModules = [];
+let publicCourses = [];
 
 async function loadCourses(){
 
     try {
         
-        const response = await fetch(`${port}/`, {
-            method: "GET",
-            credentials: "include",
-            headers: {
-                "Accept": "application/json",
-                "Content-Type": "application/json"
-            }
-        });
+        const [myRes, publicRes] = await Promise.all([
+            fetch(`${port}/` , {method: "GET", credentials: "include", headers: { "Accept": "application/json", "Content-Type": "application/json" } }),
+            fetch(`${port}/public`, { method: "GET", credentials: "include", headers: { "Accept": "application/json" } })
+        ]);
 
-        if(response.status === 401){
+        if(myRes.status === 401){
             window.location.href = "../../templates/auth/index.html";
             return;
         }
 
-        if(response.ok){
+        if(myRes.ok){
 
-            const data = await response.json();
+            const data = await myRes.json();
             const created = data.data.created || [];
             const enrolled = data.data.enrolled || [];
 
@@ -44,6 +41,14 @@ async function loadCourses(){
             }
 
         };
+
+        if(publicRes.ok){
+
+            const pData = await publicRes.json();
+            publicCourses = pData.data || [];
+
+        }
+
 
 
     } catch (error) {
@@ -494,4 +499,55 @@ function draggble(item){
 
     }
 
+};
+
+function workSpace(){
+    if(courseData || publicCourses.length > 0){
+        workS.class.add("dashboard-mode")
+    }else{
+        workS.class.remove("dashboard-mode")
+    }
+}
+
+window.addEventListener('message', async (e) => {
+    if(e.data.type === 'GAME_OVER'){
+        await saveScore({
+            score: e.data.score,
+            gameId: courseData.game_id,
+            courseId: courseData.course_id
+        });
+    }
+});
+
+
+async function saveScore({score, gameId, courseId}) {
+
+    try {
+        
+        const res = await fetch(`${port}/games`, {
+            method: "POST",
+            credentials: "include",
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({score, gameId, courseId})  
+        })
+
+        const data = await res.json()
+
+        if(res.ok){
+            if(data.data){
+                console.log("Score save:", data.data);
+            } else {
+                console.log("Alredy exists sesion for this course");
+            }
+        }
+
+    } catch (error) {
+        
+        console.error("Connection error (Server might be down):", error);
+
+    }
+    
 }

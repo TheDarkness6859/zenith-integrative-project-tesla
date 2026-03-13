@@ -110,6 +110,43 @@
         </div>
     </div>
 
+    <div id="player-container" class="fixed inset-0 z-[7000] opacity-0 pointer-events-none translate-y-[30px] transition-all duration-500 ease-in-out flex items-center justify-center p-4 md:p-8 bg-black/40 backdrop-blur-sm">
+        <div class="course-player-card bg-white/5 backdrop-blur-[25px] border border-white/10 rounded-[24px] w-full max-w-[1000px] shadow-[0_30px_60px_-12px_rgba(0,0,0,0.6)] flex flex-col md:flex-row overflow-hidden m-auto">
+            
+            <!-- SIDEBAR -->
+            <div class="w-full md:w-[35%] bg-black/30 p-8 border-r border-white/10 text-white flex flex-col">
+                <img id="player-cover" src="" class="w-full aspect-video rounded-xl object-cover mb-6 shadow-[0_10px_20px_rgba(0,0,0,0.4)]" alt="Portada" onerror="this.src='https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&q=80'">
+                <h2 id="player-title" class="font-bold text-2xl md:text-3xl mb-2">Título</h2>
+                <div class="flex flex-wrap gap-2 mb-4" id="player-badges"></div>
+                <p id="player-desc" class="text-white/70 text-sm leading-relaxed">Descripción...</p>
+            </div>
+
+            <!-- CONTENT -->
+            <div class="w-full md:w-[65%] p-6 md:p-8 flex flex-col gap-6">
+                <div>
+                    <h4 class="text-white font-bold text-lg mb-4 flex items-center gap-2">
+                        <i class="bi bi-book-half text-blue-400"></i> Lecciones
+                    </h4>
+                    <div id="player-modules" class="flex flex-col gap-2 max-h-[200px] overflow-y-auto custom-scroll pr-2">
+                        <!-- Dinámico -->
+                    </div>
+                </div>
+
+                <!-- ÁREA DE CONTENIDO INTERACTIVO (IFRAME) -->
+                <div class="mt-auto bg-black/40 rounded-2xl border border-emerald-500/20 overflow-hidden flex flex-col min-h-[300px]">
+                    <div class="flex justify-between items-center p-4 border-b border-emerald-500/10">
+                        <h5 class="text-white font-bold m-0 text-sm md:text-base flex items-center gap-2">
+                            <i class="bi bi-controller text-emerald-400"></i> Actividad Interactiva
+                        </h5>
+                        <button class="bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 text-xs py-1 px-4 rounded-full border border-emerald-500/20 transition-colors" onclick="initMiniGame()">Reiniciar</button>
+                    </div>
+                    <iframe id="game-iframe" src="about:blank" class="w-full flex-grow border-0 bg-black/20" title="Contenido del Curso"></iframe>
+                    <div id="game-status" class="text-emerald-400 font-bold text-[10px] text-center p-1 bg-black/20"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div id="footer-container"></div>
 
     <script type="module" src="../../static/js/partials.js" ></script>
