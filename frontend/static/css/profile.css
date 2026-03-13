@@ -1,8 +1,7 @@
 body {
   background: var(--bg);
-  color: var(--text);
-  line-height: 1.5;
-  padding-bottom: 72px;
+  margin: 0;
+  height: 100vh;
 }
 
 .page {
@@ -12,6 +11,7 @@ body {
   display: grid;
   gap: 20px;
 }
+
 .profile {
   display: grid;
   grid-template-columns: 90px 1fr;

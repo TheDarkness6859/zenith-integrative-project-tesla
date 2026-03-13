@@ -4,104 +4,104 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Zenith</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link rel="stylesheet" href="../../static/css/courses.css">
     <link rel="stylesheet" href="../../static/css/partials.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 </head>
 <body id="main-Body">
     
-    <button id="btn-Create" class="nav-btn btn bg-white text-black rounded-4">
-        <i class="bi bi-arrow-left me-3"></i>Create Course
+    <button id="btn-Create" class="nav-btn bg-white text-black rounded-2xl px-4 py-2 shadow-sm font-medium hover:bg-gray-50 transition-colors inline-flex items-center m-2">
+        <i class="bi bi-arrow-left mr-3"></i>Create Course
     </button>
 
-    <button id="btn-Close" class="nav-btn btn bg-white text-black rounded-4">
-        <i class="bi bi-grid-fill me-3"></i>Back
+    <button id="btn-Close" class="nav-btn bg-white text-black rounded-2xl px-4 py-2 shadow-sm font-medium hover:bg-gray-50 transition-colors inline-flex items-center m-2">
+        <i class="bi bi-grid-fill mr-3"></i>Back
     </button>
 
-    <div id="modal-Wrapper">
+    <div id="modal-Wrapper" class="pb-10">
 
-        <div class="card-zenith bg-white fade-in">
-            <div class="card-body p-4 p-md-5">
+        <div class="card-zenith bg-white fade-in rounded-xl w-[92%] max-w-4xl mx-auto my-10 shadow-lg">
+            <div class="card-body p-6 md:p-10">
 
-                <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center mb-4 gap-3">
-                    <h1 class="fw-bold m-0 fs-2 text-dark" id="modal-Title">Create your own course:</h1>
-                    <button id="submit-btn" type="submit" class="btn btn-dark text-white rounded-pill px-4 py-2 shadow-sm fw-bold transition">
-                        <i class="bi bi-rocket-takeoff-fill me-2"></i>Create
+                <div class="flex flex-col sm:flex-row justify-between sm:items-center mb-6 gap-3">
+                    <h1 class="font-bold m-0 text-3xl text-gray-900" id="modal-Title">Create your own course:</h1>
+                    <button id="submit-btn" type="submit" class="bg-gray-900 text-white rounded-full px-6 py-2 shadow-sm font-bold transition-all duration-300 hover:bg-gray-800 inline-flex items-center">
+                        <i class="bi bi-rocket-takeoff-fill mr-2"></i>Create
                     </button>
                 </div>
 
-                <hr class="border-2 opacity-10 mb-4 mb-md-5">
+                <hr class="border-t-2 border-gray-200 opacity-50 mb-6 md:mb-12">
 
-                <div class="row gx-4 gx-lg-5 mb-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-10 mb-6">
 
-                    <div class="col-md-6">
-                        <h3 class="fw-bold text-dark mb-4 d-flex align-items-center">
-                            <i class="bi bi-journal-text me-2 text-primary"></i>General
+                    <div>
+                        <h3 class="font-bold text-gray-900 mb-6 flex items-center text-xl">
+                            <i class="bi bi-journal-text mr-2 text-blue-600"></i>General
                         </h3>
 
-                        <div class="mb-3">
-                            <label for="title" class="small fw-bold form-label text-secondary">Course Title</label>
-                            <input type="text" id="title" class="form-control py-3" placeholder="advanced js" required>
+                        <div class="mb-4">
+                            <label for="title" class="text-sm font-bold block mb-2 text-gray-600">Course Title</label>
+                            <input type="text" id="title" class="block w-full px-4 py-3 text-gray-700 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="advanced js" required>
                         </div>
 
-                        <div class="mb-4">
-                            <label for="desc" class="small fw-bold form-label text-secondary">Course Description</label>
-                            <textarea id="desc" class="form-control py-3" placeholder="Tell us what students will learn..." rows="4" required></textarea>
+                        <div class="mb-6">
+                            <label for="desc" class="text-sm font-bold block mb-2 text-gray-600">Course Description</label>
+                            <textarea id="desc" class="block w-full px-4 py-3 text-gray-700 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Tell us what students will learn..." rows="4" required></textarea>
                         </div>
                     </div>
 
-                    <div class="col-md-6 d-flex flex-column align-items-center mt-5 mt-md-0">
-                        <h3 class="fw-bold text-dark mb-4 w-100 text-center text-md-start">
-                            <i class="bi bi-layers me-2 text-primary"></i>Modules
+                    <div class="flex flex-col items-center mt-10 md:mt-0">
+                        <h3 class="font-bold text-gray-900 mb-6 w-full text-center md:text-left text-xl flex items-center justify-center md:justify-start">
+                            <i class="bi bi-layers mr-2 text-blue-600"></i>Modules
                         </h3>
 
-                        <div id="modules-list" class="w-100 flex-grow-1 overflow-y-auto pe-2 d-flex flex-column gap-3 mb-3" style="max-height: 280px; min-height: 180px;">
+                        <div id="modules-list" class="w-full grow overflow-y-auto pr-2 flex flex-col gap-3 mb-4" style="max-height: 280px; min-height: 180px;">
                             
                         </div>
 
-                        <button id="add-Module" class="btn btn-outline-primary border-2 border-dashed rounded-4 w-100 w-md-75 py-2 fw-bold">
-                            <i class="bi bi-plus-circle me-2"></i>Add new module
+                        <button id="add-Module" class="border-2 border border-blue-600 text-blue-600 rounded-2xl w-full md:w-3/4 py-2 font-bold transition-colors flex justify-center items-center">
+                            <i class="bi bi-plus-circle mr-2"></i>Add new module
                         </button>
                     </div>
 
                 </div>
 
-
-                <div class="row g-4 align-items-end">
+                <div class="grid grid-cols-1 gap-6 items-end mt-4">
                     
-                    <div class="col-12">
-                        <div class="row g-3">
-                            <div class="col-6">
-                                <label for="select-Cate" class="small fw-bold form-label text-secondary">Category</label>
-                                <select id="select-Cate" class="form-select py-3" required>
+                    <div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label for="select-Cate" class="text-sm font-bold block mb-2 text-gray-600">Category</label>
+                                <select id="select-Cate" class="block w-full px-4 py-3 text-gray-700 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none" required>
 
                                 </select>
                             </div>
-                            <div class="col-6">
-                                <label for="select-Game" class="small fw-bold form-label text-secondary">Game Mode</label>
-                                <select id="select-Game" class="form-select py-3" required>
+                            <div>
+                                <label for="select-Game" class="text-sm font-bold block mb-2 text-gray-600">Game Mode</label>
+                                <select id="select-Game" class="block w-full px-4 py-3 text-gray-700 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none" required>
 
                                 </select>
                             </div>
                         </div>
                     </div>
 
-                    <div class="col-12">
-                        <div class="img-container mb-3 mt-4 w-100 ratio ratio-16x9 d-flex justify-content-center align-items-center overflow-hidden rounded-3" id="preview-Container">
-                            <div id="bg-Img-Placeholder" class="d-flex flex-column align-items-center justify-content-center text-secondary">
-                                <i class="bi bi-image fs-1 mb-2"></i>
-                                <span class="small">No image selected</span>
+                    <div>
+                        <div class="img-container mb-4 mt-6 w-full aspect-video flex justify-center items-center overflow-hidden rounded-lg bg-gray-50 border border-gray-200" id="preview-Container">
+                            <div id="bg-Img-Placeholder" class="flex flex-col items-center justify-center text-gray-400">
+                                <i class="bi bi-image text-5xl mb-2"></i>
+                                <span class="text-sm">No image selected</span>
                             </div>
                         </div>
-                        <input type="text" id="course-cover" class="form-control py-3" placeholder="Paste the cover image URL here">
+                        <input type="text" id="course-cover" class="block w-full px-4 py-3 text-gray-700 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Paste the cover image URL here">
                     </div>
 
-                    <div class="col-12">
-                        <div class="form-check form-switch rounded-3 d-flex justify-content-center align-items-center">
-                            <input class="form-check-input" type="checkbox" id="course-Public">
-                            <label class="form-check-label small fw-bold text-black ms-3" for="course-Public">Make this course public</label>
-                        </div>
+                    <div>
+                        <label class="flex justify-center items-center cursor-pointer mt-2">
+                            <input type="checkbox" id="course-Public" class="sr-only peer">
+                            <div class="relative w-11 h-6 bg-gray-300 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                            <span class="ml-3 text-sm font-bold text-gray-900">Make this course public</span>
+                        </label>
                     </div>
 
                 </div>
@@ -112,9 +112,8 @@
 
     <div id="footer-container"></div>
 
-
     <script type="module" src="../../static/js/partials.js" ></script>
-        <script type="module">
+    <script type="module">
         import { loadPartial } from "../../static/js/partials.js";
 
         document.addEventListener('DOMContentLoaded', async () => {

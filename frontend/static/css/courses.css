@@ -7,16 +7,78 @@
     --muted: #6b7280;
 }
 
-body{
+body {
     overflow: hidden; 
     margin: 0;
     height: 100vh;
-    transition: background-color 0.4s ease;
-    background: radial-gradient(circle at 100% 0%, #3a4a8d 10%, #1a1e3b 50%, #0d0f1f 80%);
-    backdrop-filter: blur(10px);
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    background: #0d0f1f;    
+    position: relative;
+    z-index: 1;
+}
+
+/* Nebula background effect */
+body::before {
+    content: '';
+    position: fixed;
+    top: -50vh; left: -50vw;
+    width: 200vw; height: 200vh; 
+    
+    background-image: 
+        radial-gradient(ellipse at 30% 40%, rgba(90, 110, 219, 0.25) 0%, transparent 45%),
+        radial-gradient(circle at 60% 50%, rgba(138, 162, 255, 0.15) 0%, transparent 50%),
+        radial-gradient(ellipse at 70% 30%, rgba(188, 138, 255, 0.2) 0%, transparent 45%),
+        radial-gradient(circle at 40% 70%, rgba(58, 74, 141, 0.3) 0%, transparent 50%);
+    
+    opacity: 0;
+    transition: opacity 1.5s ease-in-out;
+    z-index: -2; 
+    pointer-events: none;
+    
+    /* Hardware acceleration */
+    will-change: transform, opacity;
+}
+
+/* Star particles layer */
+body::after {
+    content: '';
+    position: fixed;
+    top: -100vh; left: -100vw;
+    width: 300vw; height: 300vh;
+    
+    background-image: 
+        radial-gradient(1.5px 1.5px at 50px 80px, rgba(255,255,255,0.7), transparent),
+        radial-gradient(2px 2px at 180px 250px, rgba(138, 162, 255, 0.5), transparent),
+        radial-gradient(1px 1px at 320px 120px, rgba(188, 138, 255, 0.4), transparent),
+        radial-gradient(2.5px 2.5px at 450px 380px, rgba(255,255,255,0.3), transparent);
+    background-size: 500px 500px;
+    
+    opacity: 0;
+    transition: opacity 2s ease-in-out 0.5s; 
+    z-index: -1; 
+    pointer-events: none;
+    will-change: transform, opacity;
+}
+
+body.dashboard-mode::before {
+    opacity: 1;
+    animation: moveNebula 25s linear infinite alternate;
+}
+
+body.dashboard-mode::after {
+    opacity: 1;
+    animation: floatStars 80s linear infinite;
+}
+
+@keyframes moveNebula {
+    0% { transform: translate3d(0, 0, 0) scale(1); }
+    50% { transform: translate3d(3vw, -3vh, 0) scale(1.05); }
+    100% { transform: translate3d(-3vw, 3vh, 0) scale(1); }
+}
+
+@keyframes floatStars {
+    0% { transform: translate3d(0, 0, 0); }
+    /* Matches background-size for a seamless infinite loop */
+    100% { transform: translate3d(500px, -500px, 0); } 
 }
 
 .img-container {

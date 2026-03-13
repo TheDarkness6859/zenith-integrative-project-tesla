@@ -1,32 +1,34 @@
 <footer class="footer">
-    <div class="container-fluid h-100 px-2 px-md-4">
-        <div class="row align-items-center h-100 g-0">
+    <div class="w-full h-full px-2 md:px-4">
+        <div class="flex items-center h-full w-full">
 
         <!-- Brand -->
-        <div class="col-auto d-none d-md-flex align-items-center gap-2 footer__brand">
+        <div class="hidden md:flex items-center gap-2 footer__brand flex-none">
             <i class="bi bi-shield"></i>
             <span>Zenith</span>
         </div>
 
         <!-- Nav -->
-        <div class="col footer__nav d-flex justify-content-around justify-content-md-center align-items-center gap-md-3">
-            <a href="#"><i class="bi bi-grid d-md-none"></i><span class="d-none d-md-inline">Dashboard</span></a>
-            <a href="#"><i class="bi bi-award d-md-none"></i><span class="d-none d-md-inline">Badges</span></a>
-            <a href="#"><i class="bi bi-trophy d-md-none"></i><span class="d-none d-md-inline">Leaderboard</span></a>
-            <a href="#" class="d-none d-sm-flex"><i class="bi bi-gear d-md-none"></i><span class="d-none d-md-inline">Settings</span></a>
+        <div class="flex-1 flex justify-around md:justify-center items-center md:gap-3 footer__nav">
+            <a href="#"><i class="bi bi-grid md:hidden"></i><span class="hidden md:inline">Dashboard</span></a>
+            <a href="#"><i class="bi bi-award md:hidden"></i><span class="hidden md:inline">Badges</span></a>
+            <a href="#"><i class="bi bi-trophy md:hidden"></i><span class="hidden md:inline">Leaderboard</span></a>
+            <a href="#" class="hidden sm:flex items-center"><i class="bi bi-gear md:hidden"></i><span class="hidden md:inline">Settings</span></a>
         </div>
 
         <!-- Actions -->
-        <div class="col-auto footer__actions d-flex align-items-center gap-2">
-            <div class="search d-none d-lg-flex">
-            <i class="bi bi-search"></i>
-            <input id="badgeSearch" type="text" placeholder="Search badges..." />
+        <div class="flex-none flex items-center gap-2 footer__actions">
+
+            <div class="search hidden lg:flex items-center">
+                <i class="bi bi-search"></i>
+                <input id="badgeSearch" type="text" placeholder="Search badges..." class="bg-transparent outline-none border-none" />
             </div>
-            <button class="icon-btn d-flex d-lg-none align-items-center justify-content-center" type="button">
-            <i class="bi bi-search"></i>
+            
+            <button class="icon-btn flex lg:hidden items-center justify-center" type="button">
+                <i class="bi bi-search"></i>
             </button>
-            <button class="icon-btn d-flex align-items-center justify-content-center" type="button">
-            <i class="bi bi-bell"></i>
+            <button class="icon-btn flex items-center justify-center" type="button">
+                <i class="bi bi-bell"></i>
             </button>
             <div class="footer__avatar">AC</div>
         </div>
