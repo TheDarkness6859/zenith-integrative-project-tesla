@@ -22,6 +22,8 @@ courseRoutes.put("/:id", isLoged, coursesControllers.putCourse);
 
 courseRoutes.delete("/:id", isLoged, coursesControllers.deleteCourse);
 
+courseRoutes.post("/games", isLoged, coursesControllers.postSession);
 
+courseRoutes.post("/join", isLoged, coursesControllers.postJoin);
 
 export default courseRoutes;

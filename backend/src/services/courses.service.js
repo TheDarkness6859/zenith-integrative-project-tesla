@@ -76,6 +76,63 @@ export const coursesServices = {
 
     },
 
+    saveSession: async (userId, {score, gameId, courseId}) => {
+
+        const client = await pool.connect();
+
+        try {
+            await client.query("BEGIN");
+
+            const query = "SELECT FROM save_first_session($1::uuid, $2::uuid, $3::uuid, $4) as id"
+            const resSession = await client.query(query, [userId, gameId, courseId, score]);
+
+            await client.query("COMMIT");
+
+            return resSession.rows[0].id
+
+        } catch (error) {
+
+            await client.query("ROLLBACK")
+            console.error("Error in the transaction of save score");
+            throw error;
+
+        } finally{
+
+            client.release();
+
+        }
+
+    },
+
+    joinCourse: async (userId, courseId) => {
+
+        const client = await pool.connnect();
+
+        try {
+
+            await client.query("BEGIN");
+
+            const query = "SELECT join_course($1, $2) as progress";
+            const resJoin = await client.query(query, [userId, courseId]);
+
+            await client.query("COMMIT");
+
+            return resJoin.rows[0].progress;
+            
+        } catch (error) {
+
+            await client.query("ROLLBACK")
+            console.error("Error in the transaction of join course");
+            throw error;
+
+        } finally{
+
+            client.release();
+        
+        }
+
+    },
+
     create: async (userId, {title, description, photo, isPublic, category, game, modules}) => {
 
         const client = await pool.connect();

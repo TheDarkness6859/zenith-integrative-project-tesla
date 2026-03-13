@@ -85,6 +85,54 @@ export const coursesControllers = {
 
     },
 
+    postSession: async (req, res) => {
+
+        try {
+            
+            const userId = req.userId;
+            const {score, gameId, courseId} = req.body;
+
+            const saveScore = await coursesServices.saveSession(userId, {score, gameId, courseId});
+
+            res.status(201).json({
+                message: "Session saved",
+                data: saveScore
+            })
+
+
+        } catch (error) {
+        
+            console.error('Error in postSession controller:', error);
+            res.status(500).json({ error: "Internal Server Error" });
+        
+        }
+
+
+    },
+
+    postJoin: async (req, res) => {
+
+        try {
+
+            const userId = req.userId;
+            const {courseId} = req.body;
+
+            const join = await coursesServices.joinCourse(userId, courseId);
+
+            res.status(201).json({
+                message: "Join correctly",
+                data: join
+            })
+            
+        } catch (error) {
+            
+            console.error('Error in postJoin controller:', error);
+            res.status(500).json({ error: "Internal Server Error" });
+
+        }
+
+    },
+
     deleteCourse: async (req, res) => {
 
         try {
