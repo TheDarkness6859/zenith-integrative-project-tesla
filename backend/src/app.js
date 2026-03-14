@@ -4,6 +4,7 @@ import cors from 'cors';
 import authRoutes from "./routes/auth.routes.js"
 import userRoutes from "./routes/user.routes.js"
 import courseRoutes from "./routes/courses.routes.js";
+import streakRoutes from "./routes/streak.routes.js";
 
 const app = express();
 
@@ -23,5 +24,6 @@ app.use(cookieParser());
 app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/courses', courseRoutes)
+app.use('/api/streak', streakRoutes);
 
 export default app;

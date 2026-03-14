@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevTrack Dashboard</title>
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Tu CSS -->
+    <link rel="stylesheet" href="/WirIntegration/frontend/static/css/racha.css">
+</head>
+
+<body class="bg-[#061a1b] text-white">
+
+    <!-- OVERLAY DE CELEBRACIÓN CENTRAL -->
+    <div id="celebrationOverlay">
+        <div class="text-center">
+            <div class="flex items-center justify-center gap-4">
+                <span class="huge-streak" id="celebrationNumber">0</span>
+            </div>
+            <p class="text-2xl tracking-[0.5em] font-bold mt-4 uppercase">¡Nueva Racha!</p>
+            <p class="text-cyan-400 mt-2 font-medium">Felicitaciones</p>
+        </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto py-12 px-6 pb-32">
+        <div class="grid grid-cols-12 gap-6">
+            
+            <!-- CONSISTENCY STATUS -->
+            <div class="col-span-12 md:col-span-4">
+                <div class="dashboard-card p-6 h-full flex flex-col items-center justify-center text-center">
+                    <small class="text-gray-400 font-bold block mb-1 uppercase tracking-widest">
+                        CONSISTENCY STATUS
+                    </small>
+                    <h5 class="font-bold mb-6 text-gray-300">Activity Peak</h5>
+                    
+                    <!-- Racha con Símbolos < > -->
+                    <div class="flex items-center justify-center gap-4 mb-6">
+                        <span class="symbol-bracket">&lt;</span>
+                        <h1 id="dayStreak" class="streak-number-mini">0</h1>
+                        <span class="symbol-bracket">&gt;</span>
+                    </div>
+
+                    <div class="w-full grid grid-cols-2 gap-3 mt-auto pt-4">
+                        <div class="mini-stat-box">
+                            <small class="text-gray-400 block text-xs uppercase">Best</small>
+                            <span id="previousBest" class="font-bold text-sm text-cyan-100">---</span>
+                        </div>
+                        <div class="mini-stat-box">
+                            <small class="text-gray-400 block text-xs uppercase">Rank</small>
+                            <span id="globalRank" class="font-bold text-sm">---</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CALENDARIO -->
+            <div class="col-span-12 md:col-span-8">
+                <div class="dashboard-card p-6 h-full flex flex-col">
+                    <div class="flex justify-between items-center mb-6">
+                        <h5 class="font-bold">Focus Intensity</h5>
+                        <span id="currentMonthLabel" class="month-label-cyan uppercase text-xs tracking-widest">
+                            marzo 2026
+                        </span>
+                    </div>
+
+                    <div class="calendar-center-container flex-grow">
+                        <div class="calendar-weekdays-grid mb-4">
+                            <div>M</div><div>T</div><div>W</div><div>T</div><div>F</div><div>S</div><div>S</div>
+                        </div>
+                        <div id="calendarGrid" class="calendar-numbers-grid">
+                            <!-- Se llena con streak.js -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- HISTORICAL LOGS -->
+            <div class="col-span-12">
+                <div class="dashboard-card p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h5 class="font-bold">Historical Logs</h5>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm">
+                            <thead class="border-b border-cyan-900 text-gray-500 uppercase text-[10px] tracking-wider">
+                                <tr>
+                                    <th class="text-left py-3">NAME</th>
+                                    <th class="text-left py-3">EFFICIENCY</th>
+                                    <th class="text-left py-3">XP EARNED</th>
+                                    <th class="text-left py-3">DATE</th>
+                                </tr>
+                            </thead>
+                            <tbody id="historyTable" class="divide-y divide-cyan-900/30">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contenedor del Navbar/Footer que se carga dinámicamente -->
+    <div id="footer-container"></div>
+
+    <!-- SCRIPTS -->
+    <script type="module">
+        import { loadPartial } from "../../static/js/partials.js";
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Cargamos el navbar en el contenedor de abajo
+            await loadPartial('footer-container', "../partials/navbar.html");
+        });
+    </script>
+
+    <script src="/WirIntegration/frontend/static/js/streak.js"></script>
+
+</body>
+</html>

@@ -40,7 +40,7 @@ async function importarMultiplesFragmentos(urlArchivo, selectores, idDestino) {
 importarMultiplesFragmentos('../../templates/user/profile.html', ['.avatar', '.insignia','.name-insignia','.link'], 'preview-profile');
 
 // Carta 2: Actividad (Traemos la racha de contribución y la lista de actividad)
-importarMultiplesFragmentos('../../templates/user/profile.html', ['.stats', '.activity'], 'preview-activity');
+importarMultiplesFragmentos('../../templates/user/streak.html', ['.stats', '.activity'], 'preview-activity');
 
 // Carta 3: Continuar (Traemos el nombre del usuario y la lista de cursos)
 importarMultiplesFragmentos('../../templates/user/courser.html', ['.cursos','.module','.btn-continue'], 'preview-courses');
