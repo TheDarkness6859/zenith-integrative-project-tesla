@@ -106,7 +106,7 @@ export const coursesServices = {
 
     joinCourse: async (userId, courseId) => {
 
-        const client = await pool.connnect();
+        const client = await pool.connect();
 
         try {
 

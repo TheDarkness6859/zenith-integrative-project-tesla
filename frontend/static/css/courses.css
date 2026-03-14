@@ -179,7 +179,7 @@ body.dashboard-mode::after {
 
 .floating-card {
     position: absolute;
-    width: 320px;
+    width: min(320px, calc(100vw - 48px));
     background: rgba(15, 23, 42, 0.95);
     border-radius: 16px;
     box-shadow: 0 15px 35px rgba(0,0,0,0.25);

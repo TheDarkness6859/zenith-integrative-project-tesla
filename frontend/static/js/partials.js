@@ -14,7 +14,7 @@ export async function loadPartial(id, path) {
         if(search){
             search.addEventListener("input", (e) => {
                 const query = e.target.value.trim();
-                if(query.length > 2){
+                if(query.length > 0){
                     window.searchCourse?.(query);
                 };
             });

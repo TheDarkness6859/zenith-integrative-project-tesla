@@ -4,47 +4,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DevType Defender</title>
-    <!-- Importar Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Enlazar archivo CSS externo -->
     <link rel="stylesheet" href="style.css">
 </head>
-<body class="relative w-full h-screen flex justify-center items-center">
-
-    <!-- Canvas del juego -->
+<body>
     <canvas id="gameCanvas"></canvas>
 
-    <!-- Interfaz de Usuario Superpuesta -->
-    <div id="ui-layer" class="absolute inset-0 pointer-events-none flex flex-col justify-between p-6">
-        <div class="flex justify-between items-start">
+    <div id="ui-layer">
+        <div class="ui-top">
             <div>
-                <h1 class="text-2xl font-bold text-cyan-400 drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]">DEVTYPE DEFENDER</h1>
-                <p class="text-slate-400 text-sm mt-1">Escribe para destruir los bugs y dependencias</p>
+                <h2>Type-Zenith</h2>
+                <p>Type to destroy bugs and dependencies</p>
             </div>
-            <div class="text-right">
-                <div class="text-xl font-bold text-white">Puntos: <span id="scoreDisplay" class="text-yellow-400">0</span></div>
-            </div>
+            <div>Points: <span id="scoreDisplay">0</span></div>
         </div>
     </div>
 
-    <!-- Pantalla de Inicio / Fin -->
-    <div id="menu-screen" class="absolute inset-0 bg-slate-900/80 backdrop-blur-sm flex justify-center items-center z-50">
-        <div class="bg-slate-800 p-8 rounded-2xl border border-slate-600 shadow-2xl text-center max-w-md w-full">
-            <h2 id="menu-title" class="text-4xl font-bold text-cyan-400 mb-4">DEVTYPE</h2>
-            <p id="menu-desc" class="text-slate-300 mb-6">Defiende tu servidor de las amenazas. Escribe las palabras para disparar.</p>
-            <div id="final-score-container" class="hidden mb-6">
-                <p class="text-lg text-slate-400">Puntuación Final</p>
-                <p id="final-score" class="text-5xl font-bold text-yellow-400 mt-2">0</p>
+    <div id="menu-screen">
+        <div class="menu-box">
+            <h2 id="menu-title">DEVTYPE</h2>
+            <p id="menu-desc">Defend your server. Type the words to shoot.</p>
+            <div id="final-score-container">
+                <p>Final Score</p>
+                <p id="final-score">0</p>
             </div>
-            <button id="start-btn" class="pointer-events-auto bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-3 px-8 rounded-full transition-all transform hover:scale-105 shadow-[0_0_15px_rgba(8,145,178,0.5)]">
-                Iniciar Servidor (Jugar)
-            </button>
+            <button id="start-btn">Play</button>
         </div>
     </div>
 
     <input type="text" id="mobile-input" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
-
-    <!-- Enlazar archivo JS externo -->
     <script src="script.js"></script>
 </body>
 </html>

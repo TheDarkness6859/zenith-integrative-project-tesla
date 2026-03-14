@@ -276,7 +276,6 @@ function showErrorUI(message) {
 
 if(submitBtn){
     submitBtn.addEventListener("click", (e) => {
-        e.preventDefault();
         createOrEdit();
     })
 }
@@ -384,12 +383,13 @@ function renderCards(data, index) {
     
     const card = document.createElement("div");
     card.className= "floating-card"
-    const cardId = `card_${data.course_id}`
+    card.id = `card_${data.course_id}`;
+
 
     const savedPos = JSON.parse(localStorage.getItem(`pos_${card.id}`));
 
-    let startX = 100 + (40 * index);
-    let startY = 100 + (40 * index);
+    let startX = 80 + (index * 60) + Math.random() * 40;
+    let startY = 80 + (index * 60) + Math.random() * 40;
 
     if(savedPos){
         startX = savedPos.x;
@@ -424,7 +424,16 @@ function renderCards(data, index) {
         </div>
     `;
 
+    // Mouse
     card.addEventListener("dblclick", () => window.openPlayer(data));
+    
+    //  Touch
+    let lastTap = 0;
+    card.addEventListener('touchend', () => {
+        const now = Date.now();
+        if(now - lastTap < 300) window.openPlayer(data);
+        lastTap = now;
+    });
 
     document.body.appendChild(card);
     draggble(card)
@@ -454,85 +463,93 @@ function collision(item){
 }
 
 function draggble(item){
-
     const header = item.querySelector('.card-header-drag');
     let mouseX, mouseY, initialX, initialY;
-    const margin = 24, bottomNavHeight = 75, iman = 40; 
+    const margin = 24, bottomNavHeight = 75, iman = 40;
 
-    header.onmousedown = (e) => {
+    function onMove(clientX, clientY) {
+        let diffX = clientX - mouseX;
+        let diffY = clientY - mouseY;
+        mouseX = clientX;
+        mouseY = clientY;
 
-        e.preventDefault();
-        item.style.transition = "none"
+        let nT = item.offsetTop + diffY;
+        let nL = item.offsetLeft + diffX;
+        let maxBottom = window.innerHeight - item.offsetHeight - margin - bottomNavHeight;
 
-        mouseX = e.clientX;
-        mouseY = e.clientY;
+        nT = Math.max(margin, Math.min(nT, maxBottom));
+        nL = Math.max(margin, Math.min(nL, window.innerWidth - item.offsetWidth - margin));
 
-        initialX = item.offsetLeft;
-        initialY = item.offsetTop
+        item.style.top = nT + "px";
+        item.style.left = nL + "px";
 
-        document.onmousemove = (e) => {
-
-            e.preventDefault();
-
-            let diffX = e.clientX - mouseX;
-            let diffY = e.clientY - mouseY;
-
-            mouseX = e.clientX
-            mouseY = e.clientY
-
-            let nT = item.offsetTop + diffY;
-            let nL = item.offsetLeft + diffX;
-
-            let maxBottom = window.innerHeight - item.offsetHeight - margin - bottomNavHeight;
-
-            nT = Math.max(margin, Math.min(nT, maxBottom))
-            nL = Math.max(margin, Math.min(nL, window.innerWidth - item.offsetWidth - margin))
-
-            item.style.top = nT + "px";
-            item.style.left = nL + "px";
-
-            if(collision(item)) item.classList.add("collision-warning");
-            else item.classList.remove("collision-warning");
-
-        }
-
-        document.onmouseup = () => {
-
-            document.onmousemove = null; 
-            document.onmouseup = null;
-
-            item.style.transition = 'all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1)'; 
-
-            if(collision(item)){
-
-                item.style.left = initialX + "px";
-                item.style.top = initialY + "px";
-
-                item.classList.remove("collision-warning");
-
-            }else{
-
-                item.classList.remove("collision-warning");
-
-                let fT = item.offsetTop, fL = item.offsetLeft;
-                let maxBottom = window.innerHeight - item.offsetHeight - margin - bottomNavHeight
-
-                if(fT < margin + iman ) fT = margin;
-                if(fT > maxBottom - iman) fT = maxBottom;
-                if(fL < margin + iman) fL = margin;
-                if(fL > window.innerWidth - item.innerWidth - margin - iman) fL = window.innerWidth - item.offsetWidth - margin; 
-
-                item.style.top = fT + "px";
-                item.style.left = fL + "px"
-            
-                localStorage.setItem(`pos_${item.id}`, JSON.stringify({ x: fL, y: fT }));
-            }
-
-        }
-
+        if(collision(item)) item.classList.add("collision-warning");
+        else item.classList.remove("collision-warning");
     }
 
-};
+    function onEnd() {
+        item.style.transition = 'all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1)';
+
+        if(collision(item)){
+            item.style.left = initialX + "px";
+            item.style.top = initialY + "px";
+            item.classList.remove("collision-warning");
+        } else {
+            item.classList.remove("collision-warning");
+
+            let fT = item.offsetTop, fL = item.offsetLeft;
+            const maxBottom = window.innerHeight - item.offsetHeight - margin - bottomNavHeight;
+
+            if(fT < margin + iman) fT = margin;
+            if(fT > maxBottom - iman) fT = maxBottom;
+            if(fL < margin + iman) fL = margin;
+            if(fL > window.innerWidth - item.offsetWidth - margin - iman) fL = window.innerWidth - item.offsetWidth - margin;
+
+            item.style.top = fT + "px";
+            item.style.left = fL + "px";
+
+            localStorage.setItem(`pos_${item.id}`, JSON.stringify({ x: fL, y: fT }));
+        }
+    }
+
+    // Mouse
+    header.onmousedown = (e) => {
+        e.preventDefault();
+        item.style.transition = "none";
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        initialX = item.offsetLeft;
+        initialY = item.offsetTop;
+
+        document.onmousemove = (e) => { e.preventDefault(); onMove(e.clientX, e.clientY); };
+        document.onmouseup = () => {
+            document.onmousemove = null;
+            document.onmouseup = null;
+            onEnd();
+        };
+    };
+
+    // Touch
+    header.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        item.style.transition = "none";
+        const touch = e.touches[0];
+        mouseX = touch.clientX;
+        mouseY = touch.clientY;
+        initialX = item.offsetLeft;
+        initialY = item.offsetTop;
+    }, { passive: false });
+
+    header.addEventListener('touchmove', (e) => {
+        e.preventDefault();
+        const touch = e.touches[0];
+        onMove(touch.clientX, touch.clientY);
+    }, { passive: false });
+
+    header.addEventListener('touchend', () => {
+        onEnd();
+    });
+}
 
 function workSpace(){
     if(courseData || publicCourses.length > 0){
@@ -622,8 +639,8 @@ window.openPlayer = (data) => {
 window.closePlayer = () => { 
     document.getElementById("game-iframe").src = "about:blank"; 
     document.getElementById("player-container").classList.remove("visible"); 
-    document.getElementById("btn-close-player").style.display="none"; 
-    document.querySelectorAll(".floating-card").forEach(c => c.style.display="flex"); 
+    closeBtn.style.display = "none"
+    document.querySelectorAll(".floating-card").forEach(c => c.style.display=""); 
 };
 
 closeBtn.addEventListener("click", closePlayer);
@@ -634,19 +651,22 @@ window.initMiniGame = () => {
     if (iframe) {
         status.innerText = "Recargando actividad...";
 
-        iframe.src = `../../games/${currentCourse.game_src}/typeZenith.html`;
+        iframe.src = `../../games/${currentCourse.game_src}/index.html`;
         setTimeout(() => { status.innerText = ""; }, 1000);
     }
 };
 
 window.searchCourse = (query) => {
 
-    const results = publicCourses.filter(c =>
+    const enrolledIds = enrolled.map(c => c.course_id);
 
-        c.title.toLowerCase().includes(query.toLowerCase()) ||
-        c.description.toLowerCase().includes(query.toLowerCase())
-        
+    const results = publicCourses.filter(c =>
+        (c.title.toLowerCase().includes(query.toLowerCase()) ||
+        c.description?.toLowerCase().includes(query.toLowerCase())) &&
+        !enrolledIds.includes(c.course_id) &&
+        c.course_id !== courseData?.course_id  
     );
+
     renderResults(results);
 }
 
@@ -660,7 +680,7 @@ function renderResults(results){
     const dropdown = document.createElement("div");
     dropdown.id = "search-dropdown";
     dropdown.className = `
-        absolute bottom-full mb-2 left-0 w-[320px] 
+        absolute bottom-full mb-4 right-0 w-[320px] 
         bg-slate-900/95 backdrop-blur-xl border border-white/10 
         rounded-2xl shadow-[0_-10px_40px_rgba(0,0,0,0.5)] 
         overflow-hidden z-[9000] max-h-[400px] overflow-y-auto
@@ -692,6 +712,10 @@ function renderResults(results){
 
     const searchWrapper = document.querySelector(".search");
     searchWrapper.style.position = "relative";
+
+    dropdown.style.right = "0";
+    dropdown.style.left = "auto";
+
     searchWrapper.appendChild(dropdown);
 
     setTimeout(() => {
