@@ -383,7 +383,8 @@ function renderCards(data, index) {
     
     const card = document.createElement("div");
     card.className= "floating-card"
-    const cardId = `card_${data.course_id}`
+    card.id = `card_${data.course_id}`;
+
 
     const savedPos = JSON.parse(localStorage.getItem(`pos_${card.id}`));
 
@@ -423,7 +424,16 @@ function renderCards(data, index) {
         </div>
     `;
 
+    // Mouse
     card.addEventListener("dblclick", () => window.openPlayer(data));
+    
+    //  Touch
+    let lastTap = 0;
+    card.addEventListener('touchend', () => {
+        const now = Date.now();
+        if(now - lastTap < 300) window.openPlayer(data);
+        lastTap = now;
+    });
 
     document.body.appendChild(card);
     draggble(card)
@@ -512,17 +522,51 @@ function draggble(item){
             if(fL < margin + iman) fL = margin;
             if(fL > window.innerWidth - item.offsetWidth - margin - iman) fL = window.innerWidth - item.offsetWidth - margin;
 
-                item.style.top = fT + "px";
-                item.style.left = fL + "px"
-            
-                localStorage.setItem(`pos_${item.id}`, JSON.stringify({ x: fL, y: fT }));
-            }
+            item.style.top = fT + "px";
+            item.style.left = fL + "px";
 
+            localStorage.setItem(`pos_${item.id}`, JSON.stringify({ x: fL, y: fT }));
         }
-
     }
 
-};
+    // Mouse
+    header.onmousedown = (e) => {
+        e.preventDefault();
+        item.style.transition = "none";
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        initialX = item.offsetLeft;
+        initialY = item.offsetTop;
+
+        document.onmousemove = (e) => { e.preventDefault(); onMove(e.clientX, e.clientY); };
+        document.onmouseup = () => {
+            document.onmousemove = null;
+            document.onmouseup = null;
+            onEnd();
+        };
+    };
+
+    // Touch
+    header.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        item.style.transition = "none";
+        const touch = e.touches[0];
+        mouseX = touch.clientX;
+        mouseY = touch.clientY;
+        initialX = item.offsetLeft;
+        initialY = item.offsetTop;
+    }, { passive: false });
+
+    header.addEventListener('touchmove', (e) => {
+        e.preventDefault();
+        const touch = e.touches[0];
+        onMove(touch.clientX, touch.clientY);
+    }, { passive: false });
+
+    header.addEventListener('touchend', () => {
+        onEnd();
+    });
+}};
 
 function workSpace(){
     if(courseData || publicCourses.length > 0){
@@ -585,17 +629,25 @@ window.openPlayer = (data) => {
     desc.innerText = data.description || "...";
     cover.src = data.cover_photo || "";
 
-    bad.innerHTML = data.is_mine ? `<span class="bg-blue-500 text-white text-[10px] font-bold px-3 py-1 rounded-full">MI PROYECT</span>` : `<span class="bg-slate-500 text-white text-[10px] font-bold px-3 py-1 rounded-full">COMUNITY</span>`;
-    const mod = document.getElementById("player-modules"); 
-    mod.innerHTML = "";
+    bad.innerHTML = data.is_mine ? `<span class="bg-blue-500 text-white text-[10px] font-bold px-3 py-1 rounded-full">MI PROYECTO</span>` : `<span class="bg-slate-500 text-white text-[10px] font-bold px-3 py-1 rounded-full">COMUNIDAD</span>`;
+    const mod = document.getElementById("player-modules"); mod.innerHTML = "";
+
+    console.log({
+        title: document.getElementById("player-title"),
+        desc: document.getElementById("player-desc"),
+        cover: document.getElementById("player-cover"),
+        bad: document.getElementById("player-badges"),
+        mod: document.getElementById("player-modules"),
+        container: document.getElementById("player-container"),
+        closeBtn: document.getElementById("btn-close-player")
+    });
 
     if(data.modules?.length > 0) {
         data.modules.forEach((m, i) => mod.innerHTML += `<div class="bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white transition-colors hover:bg-white/10 flex gap-3 align-items-center"><div class="bg-blue-500 text-white w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs shrink-0">${i+1}</div><h6 class="font-bold m-0 text-sm">${m.title || "Módulo "+(i+1)}</h6></div>`);
     } else mod.innerHTML = "<p class='text-white/50 text-xs'>No hay lecciones.</p>";
 
     container.classList.add("visible");
-    closeBtn.style.display= "block";
-    btnCreate.style.display= "none";
+    closeBtn.style.display="block";
 
     initMiniGame();
 
@@ -604,8 +656,7 @@ window.openPlayer = (data) => {
 window.closePlayer = () => { 
     document.getElementById("game-iframe").src = "about:blank"; 
     document.getElementById("player-container").classList.remove("visible"); 
-    closeBtn.style.display = "none";
-    btnCreate.style.display = "block";
+    closeBtn.style.display = "none"
     document.querySelectorAll(".floating-card").forEach(c => c.style.display=""); 
 };
 
@@ -617,19 +668,22 @@ window.initMiniGame = () => {
     if (iframe) {
         status.innerText = "Recargando actividad...";
 
-        iframe.src = `../../games/${currentCourse.game_src}/typeZenith.html`;
+        iframe.src = `../../games/${currentCourse.game_src}/index.html`;
         setTimeout(() => { status.innerText = ""; }, 1000);
     }
 };
 
 window.searchCourse = (query) => {
 
-    const results = publicCourses.filter(c =>
+    const enrolledIds = enrolled.map(c => c.course_id);
 
-        c.title.toLowerCase().includes(query.toLowerCase()) ||
-        c.description.toLowerCase().includes(query.toLowerCase())
-        
+    const results = publicCourses.filter(c =>
+        (c.title.toLowerCase().includes(query.toLowerCase()) ||
+        c.description?.toLowerCase().includes(query.toLowerCase())) &&
+        !enrolledIds.includes(c.course_id) &&
+        c.course_id !== courseData?.course_id  
     );
+
     renderResults(results);
 }
 
@@ -643,7 +697,7 @@ function renderResults(results){
     const dropdown = document.createElement("div");
     dropdown.id = "search-dropdown";
     dropdown.className = `
-        absolute bottom-full mb-2 left-0 w-[320px] 
+        absolute bottom-full mb-4 right-0 w-[320px] 
         bg-slate-900/95 backdrop-blur-xl border border-white/10 
         rounded-2xl shadow-[0_-10px_40px_rgba(0,0,0,0.5)] 
         overflow-hidden z-[9000] max-h-[400px] overflow-y-auto
@@ -675,6 +729,10 @@ function renderResults(results){
 
     const searchWrapper = document.querySelector(".search");
     searchWrapper.style.position = "relative";
+
+    dropdown.style.right = "0";
+    dropdown.style.left = "auto";
+
     searchWrapper.appendChild(dropdown);
 
     setTimeout(() => {

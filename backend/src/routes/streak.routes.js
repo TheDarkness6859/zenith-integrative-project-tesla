@@ -3,13 +3,13 @@ import { getStreakStatus } from "../controllers/streak.controller.js";
 import { isLoged } from "../middleware.js"; 
 import pool from "../configuration/posgresdb.js"; 
 
-const router = Router();
+const streakRoutes = Router();
 
 // 1. Obtener estado actual
-router.get("/status", isLoged, getStreakStatus);
+streakRoutes.get("/status", isLoged, getStreakStatus);
 
 // 2. Ruta corregida con isLoged
-router.put("/update-manual", isLoged, async (req, res) => {
+streakRoutes.put("/update-manual", isLoged, async (req, res) => {
     try {
         const userId = req.userId; 
         const { nuevoValor } = req.body;
@@ -37,4 +37,4 @@ router.put("/update-manual", isLoged, async (req, res) => {
     }
 });
 
-export default router;
+export default streakRoutes;

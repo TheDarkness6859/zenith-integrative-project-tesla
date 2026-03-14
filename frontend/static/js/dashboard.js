@@ -1,4 +1,4 @@
-const port = "http://127.0.0.1:4000/api/courses";
+const port = "http://127.0.0.1:4000/api";
 
 /**
  * Imports multiple fragments from an external HTML file into a container.
@@ -44,7 +44,7 @@ async function importFragments(fileUrl, selectors, targetId) {
 // Fetch courses directly from backend
 async function loadDashboardCourses() {
     try {
-        const res = await fetch(`${port}/`, {
+        const res = await fetch(`${port}/courses/`, {
             method: "GET",
             credentials: "include",
             headers: { "Accept": "application/json" }
@@ -94,21 +94,51 @@ async function loadDashboardCourses() {
     }
 }
 
+async function loadDashboardStreak() {
+    try {
+        const res = await fetch(`${port}/streak/status`, {
+            method: "GET",
+            credentials: "include"
+        });
+
+        if(!res.ok) return;
+
+        const data = await res.json();
+        const streak = data.userStats?.dayStreak || 0;
+        const lastSession = data.history?.[0];
+
+        const streakEl = document.getElementById('dash-streak');
+        const xpEl = document.getElementById('dash-xp');
+        const lastEl = document.getElementById('dash-last-session');
+
+        if(streakEl) streakEl.innerText = `${streak}🔥`;
+
+        if(xpEl) {
+            const totalXp = data.history?.reduce((acc, h) => acc + (h.xp || 0), 0) || 0;
+            xpEl.innerText = totalXp;
+        }
+
+        if(lastEl && lastSession) {
+            const date = new Date(lastSession.date);
+            lastEl.innerText = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        }
+
+    } catch(error) {
+        console.error("Error loading streak:", error);
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
 
     // Card 1: Profile — avatar and name
     importFragments(
-        '../user/profile.html',
+        '../../templates/user/profile.html',
         ['.avatar-box', '.name-row', '.insignia'],
         'preview-profile'
     );
 
-    // Card 2: Activity — stats and recent activity
-    importFragments(
-        '../user/profile.html',
-        ['.stats', '.activity'],
-        'preview-activity'
-    );
+    // Card 2: Streak — direct backend fetch
+    loadDashboardStreak();
 
     // Card 3: Courses — direct backend fetch
     loadDashboardCourses();

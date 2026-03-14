@@ -8,8 +8,8 @@ import authRoutes from "./routes/auth.routes.js";
 import userRoutes from "./routes/user.routes.js";
 import courseRoutes from "./routes/courses.routes.js";
 import googleAuthRoutes from "./routes/google.auth.routes.js";
-
 import "./configuration/google.auth.config.js";
+import streakRoutes from "./routes/streak.routes.js";
 
 const app = express();
 
@@ -42,5 +42,6 @@ app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/courses", courseRoutes);
 app.use("/auth", googleAuthRoutes);
+app.use("/api/streak", streakRoutes);
 
 export default app;
