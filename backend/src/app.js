@@ -1,29 +1,46 @@
 import express from "express";
-import cookieParser from "cookie-parser"
-import cors from 'cors';
-import authRoutes from "./routes/auth.routes.js"
-import userRoutes from "./routes/user.routes.js"
+import cookieParser from "cookie-parser";
+import cors from "cors";
+import passport from "passport";
+import session from "express-session";
+
+import authRoutes from "./routes/auth.routes.js";
+import userRoutes from "./routes/user.routes.js";
 import courseRoutes from "./routes/courses.routes.js";
-import streakRoutes from "./routes/streak.routes.js";
+import googleAuthRoutes from "./routes/google.auth.routes.js";
+
+import "./configuration/google.auth.config.js";
 
 const app = express();
 
 app.use(cors({
-    origin: 'http://127.0.0.1:5500',
-    credentials: true,               
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'Accept']
+    origin: "http://127.0.0.1:5500",
+    credentials: true
 }));
 
-//Allow that express can read json.
-app.use(express.json({ limit: '10mb' }));
-app.use(express.urlencoded({ limit: '10mb', extended: true }));
+app.use(express.json());
+app.use(express.urlencoded({ extended:true }));
 app.use(cookieParser());
 
-//Route url.
-app.use('/api/auth', authRoutes);
-app.use('/api/user', userRoutes);
-app.use('/api/courses', courseRoutes)
-app.use('/api/streak', streakRoutes);
+/* SESSION */
+app.use(session({
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    secure: false,
+    sameSite: "lax"
+  }
+}));
+
+/* PASSPORT */
+app.use(passport.initialize());
+app.use(passport.session());
+
+/* ROUTES */
+app.use("/api/auth", authRoutes);
+app.use("/api/user", userRoutes);
+app.use("/api/courses", courseRoutes);
+app.use("/auth", googleAuthRoutes);
 
 export default app;

@@ -143,9 +143,9 @@ document.addEventListener("DOMContentLoaded", async () => {
                 const user = await res.json();
                 
                 // Actualizamos nombre y descripción
-                document.getElementById("name_profile").textContent = user.full_name;
-                document.getElementById("description_profile").textContent = user.description || "Sin descripción";
-                document.getElementById("rol_profile").textContent = user.language ;
+                const nameEl = document.getElementById("name_profile"); if (nameEl) nameEl.textContent = user.full_name;
+                const descEl = document.getElementById("description_profile"); if (descEl) descEl.textContent = user.description || "Sin descripción";
+                const rolEl = document.getElementById("rol_profile"); if (rolEl) rolEl.textContent = user.language;
                 const phoneElem = document.getElementById("phone");
                 if (phoneElem) phoneElem.textContent = user.phone;
 
@@ -170,12 +170,12 @@ document.addEventListener("DOMContentLoaded", async () => {
                 }
 
                 // Pre-rellenamos el formulario de edición
-                document.getElementById("edit_name").value = user.full_name || "";
-                document.getElementById("edit_email").value = user.email || "";
-                document.getElementById("edit_description").value = user.description || "";
-                document.getElementById("edit_lenguage").value = user.language || "";
-                document.getElementById("edit_phone").value = user.phone || "";
-                document.getElementById("edit_country").value = user.country || "";
+                const editName = document.getElementById("edit_name"); if (editName) editName.value = user.full_name || "";
+                const editEmail = document.getElementById("edit_email"); if (editEmail) editEmail.value = user.email || "";
+                const editDesc = document.getElementById("edit_description"); if (editDesc) editDesc.value = user.description || "";
+                const editLang = document.getElementById("edit_lenguage"); if (editLang) editLang.value = user.language || "";
+                const editPhone = document.getElementById("edit_phone"); if (editPhone) editPhone.value = user.phone || "";
+                const editCountry = document.getElementById("edit_country"); if (editCountry) editCountry.value = user.country || "";
 
         
             }
