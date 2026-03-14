@@ -260,5 +260,13 @@ function gameLoop() {
 }
 
 startBtn.addEventListener('click', startGame);
-canvas.addEventListener('click', () => { if(state.isRunning) mobileInput.focus(); });
-initStars(); draw();
+
+// Enfocar input en clic para asegurar teclado en móviles
+canvas.addEventListener('click', () => {
+    if(state.isRunning) mobileInput.focus();
+});
+
+// Dibujar el fondo inicial antes de jugar
+initStars();
+draw();
+
