@@ -7,6 +7,8 @@ const authRoutes = express.Router();
 authRoutes.post("/login", authController.login);
 authRoutes.post("/register", authController.register);
 
+authRoutes.get("/confirm/:token", authController.confirmEmail);
+
 authRoutes.get("/", isGuest, (req, res) =>{
 
     res.redirect("/register")

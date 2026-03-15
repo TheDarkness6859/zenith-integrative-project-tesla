@@ -140,7 +140,7 @@ if (loginForm) {
                 }, 1500);
  
             } else {
-                displayMessage(data.message || "Invalid credentials.", "error");
+                displayMessage(data.error || "Login failed.", "error");
             }
  
         } catch (error) {
@@ -184,15 +184,16 @@ if (registerForm) {
             const data = await response.json();
  
             if (response.ok) {
-                displayMessage("User registered successfully!", "success");
+                const successMsg = data.message || "¡User register! Please, check your email for verificate yout account";
+                displayMessage(successMsg, "success");
                 registerForm.reset();
  
                 setTimeout(() => {
                     window.location.href = "../../templates/auth/index.html";
-                }, 1500);
+                }, 3500);
  
             } else {
-                displayMessage(data.message || "Registration failed.", "error");
+                displayMessage(data.error || data.message || "Registration failed.", "error");
             }
  
         } catch (error) {
