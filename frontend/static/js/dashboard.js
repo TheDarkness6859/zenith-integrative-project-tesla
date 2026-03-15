@@ -1,12 +1,9 @@
 const port = "http://127.0.0.1:4000/api";
 
 /**
- * Imports multiple fragments from an external HTML file into a container.
- * @param {string} fileUrl - Path to the HTML file
- * @param {Array} selectors - List of classes or IDs to extract
- * @param {string} targetId - ID of the destination container
+ * Loads the user profile information into the dashboard preview card.
+ * It fetches the user data and renders the avatar, name, and language.
  */
-
 async function loadDashboardProfile() {
     try {
         const res = await fetch(`${port}/user/profile`, {
@@ -21,6 +18,7 @@ async function loadDashboardProfile() {
         const container = document.getElementById('preview-profile');
         if(!container) return;
 
+        // Generate initials if the user does not have a profile photo
         const initials = data.full_name?.split(" ").map(n => n[0]).join("").slice(0,2).toUpperCase() || "?";
 
         container.innerHTML = `
@@ -44,7 +42,10 @@ async function loadDashboardProfile() {
     }
 }
 
-// Fetch courses directly from backend
+/**
+ * Loads the courses preview for the dashboard.
+ * Includes both courses created by the user and courses the user joined.
+ */
 async function loadDashboardCourses() {
     try {
         const res = await fetch(`${port}/courses/`, {
@@ -64,6 +65,7 @@ async function loadDashboardCourses() {
         const container = document.getElementById('preview-courses');
         if (!container) return;
 
+        // If the user has no courses yet
         if (all.length === 0) {
             container.innerHTML = `
                 <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; gap:8px; opacity:0.4;">
@@ -73,10 +75,12 @@ async function loadDashboardCourses() {
             return;
         }
 
+        // Render each course preview row
         container.innerHTML = all.map(c => {
             const progress = c.progress !== undefined ? c.progress : (c.is_mine ? 100 : 0);
             const color = progress === 100 ? '#34d399' : progress > 0 ? '#06f9f9' : 'rgba(148,163,184,0.4)';
             const label = progress === 100 ? 'Completed' : progress > 0 ? 'In progress' : 'Not started';
+
             return `
                 <div class="course-row">
                     <div class="course-icon">
@@ -97,6 +101,10 @@ async function loadDashboardCourses() {
     }
 }
 
+/**
+ * Loads the user's streak information and activity summary.
+ * Displays streak days, total XP, and last session date.
+ */
 async function loadDashboardStreak() {
     try {
         const res = await fetch(`${port}/streak/status`, {
@@ -117,6 +125,7 @@ async function loadDashboardStreak() {
         if(streakEl) streakEl.innerText = `${streak}🔥`;
 
         if(xpEl) {
+            // Calculate total XP from activity history
             const totalXp = data.history?.reduce((acc, h) => acc + (h.xp || 0), 0) || 0;
             xpEl.innerText = totalXp;
         }
@@ -131,15 +140,16 @@ async function loadDashboardStreak() {
     }
 }
 
+// Initialize dashboard data when the page loads
 document.addEventListener('DOMContentLoaded', () => {
 
-    // Card 1: Profile — avatar and name
+    // Card 1: Profile preview
     loadDashboardProfile();
 
-    // Card 2: Streak — direct backend fetch
+    // Card 2: Streak information
     loadDashboardStreak();
 
-    // Card 3: Courses — direct backend fetch
+    // Card 3: Courses preview
     loadDashboardCourses(); 
 
 });

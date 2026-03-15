@@ -56,6 +56,3 @@ export const closeBtn = document.getElementById("btn-Close");
 export const iframe = document.getElementById("game-iframe");
 export const status = document.getElementById("game-status");
 
-//Search
-
-export const existing = document.getElementById("search-dropdown");

@@ -16,7 +16,7 @@ const register = async (req, res) => {
  
         await authService.registerUser(full_name, email, password);
  
-        // Notificar a n8n para enviar correo de bienvenida (no bloquea la respuesta)
+        // Notify to n8n for send a welcome email 
         notifyRegister(full_name, email);
  
         res.status(201).json({ message: "User register" });
@@ -54,7 +54,7 @@ const login = async (req, res) => {
                 maxAge: 24 * 60 * 60 * 1000,
             });
  
-            // Notificar a n8n para enviar correo de confirmación de login
+            // Notify to n8n for send a confirmation email of login
             notifyLogin(result.userFound.full_name, result.userFound.email);
  
             return res.json({ 

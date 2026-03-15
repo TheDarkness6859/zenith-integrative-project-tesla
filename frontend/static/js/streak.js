@@ -1,6 +1,6 @@
 const API_URL = "http://127.0.0.1:4000/api/streak/status";
 
-// 1. Calendario (Círculos limpios)
+// Calendar rendering
 function renderCalendar(activeDays) {
     const grid = document.getElementById('calendarGrid');
     const label = document.getElementById('currentMonthLabel');
@@ -27,21 +27,23 @@ function renderCalendar(activeDays) {
         const dayDiv = document.createElement('div');
         dayDiv.className = 'calendar-day-mini'; 
         dayDiv.innerText = i;
+
         if (activeDays && activeDays.includes(i)) {
             dayDiv.classList.add('active'); 
         }
+
         grid.appendChild(dayDiv);
     }
 }
 
-// 2. Tabla de Logs
+// Activity history table
 function renderHistory(history) {
     const tableBody = document.getElementById('historyTable');
     if (!tableBody || !history) return;
     
     tableBody.innerHTML = history.map(item => {
         const fechaObjeto = new Date(item.date);
-        const fechaFormateada = fechaObjeto.toLocaleDateString('es-ES', {
+        const fechaFormateada = fechaObjeto.toLocaleDateString('en-US', {
             day: '2-digit', month: '2-digit', year: 'numeric'
         });
 
@@ -56,9 +58,9 @@ function renderHistory(history) {
     }).join('');
 }
 
-// 3. Temporizador + Animación Épica
+// Streak timer simulation
 function iniciarTemporizadorRacha() {
-    console.log("Temporizador de racha iniciado (2 min)");
+    console.log("Streak timer started (2 min)");
     
     setInterval(async () => {
         const rachaElement = document.getElementById('dayStreak');
@@ -68,7 +70,7 @@ function iniciarTemporizadorRacha() {
         rachaActual++;
         rachaElement.innerText = rachaActual;
 
-        // ¡Lanza la animación central!
+        // Trigger streak animation
         window.celebrateNewStreak(rachaActual);
 
         try {
@@ -79,12 +81,12 @@ function iniciarTemporizadorRacha() {
                 credentials: 'include'
             });
         } catch (error) {
-            console.error("❌ Error de red:", error);
+            console.error("❌ Network error:", error);
         }
     }, 120000); 
 }
 
-// 4. Función de Animación (Global)
+// Global animation function
 window.celebrateNewStreak = function(number) {
     const overlay = document.getElementById('celebrationOverlay');
     const numEl = document.getElementById('celebrationNumber');
@@ -104,7 +106,7 @@ window.celebrateNewStreak = function(number) {
     }, 3000);
 }
 
-// 5. Carga Inicial
+// Initial dashboard load
 async function initDashboard() {
     try {
         const response = await fetch(`${API_URL}`, {
@@ -118,6 +120,7 @@ async function initDashboard() {
         }
 
         const data = await response.json();
+
         document.getElementById('dayStreak').innerText = data.userStats.dayStreak;
         document.getElementById('previousBest').innerText = `${data.userStats.previousBest} Days`;
 
@@ -125,6 +128,7 @@ async function initDashboard() {
         const puesto = data.userStats.globalRank; 
         rankElement.innerText = `#${puesto}`;
 
+        // Rank color depending on position
         if (puesto === 1) rankElement.style.color = "#FFD700"; 
         else if (puesto === 2) rankElement.style.color = "#C0C0C0"; 
         else if (puesto === 3) rankElement.style.color = "#CD7F32"; 
@@ -132,6 +136,7 @@ async function initDashboard() {
 
         renderCalendar(data.activeDays);
         renderHistory(data.history);
+
         iniciarTemporizadorRacha();
 
     } catch (error) {

@@ -1,37 +1,39 @@
-const badgeSearch = document.querySelector("#badgeSearch"); // Selecciona el input de busqueda.
-const badgeCards = Array.from(document.querySelectorAll("[data-badge]")); // Convierte los badges en arreglo para iterar.
-const avatarInput = document.querySelector("#avatarInput"); // Captura el input de archivo del avatar.
-const avatarLabel = document.querySelector(".avatar"); // Referencia al contenedor visual del avatar.
-const footerAvatar = document.querySelector(".footer__avatar"); // Referencia al avatar del footer.
+const badgeSearch = document.querySelector("#badgeSearch");
+const badgeCards = Array.from(document.querySelectorAll("[data-badge]"));
+const avatarInput = document.querySelector("#avatarInput");
+const avatarLabel = document.querySelector(".avatar");
+const footerAvatar = document.querySelector(".footer__avatar");
 
-const port = "http://127.0.0.1:4000"; // URL base para las peticiones al backend.
+const port = "http://127.0.0.1:4000";
 
 
-if (avatarInput && avatarLabel) { // Valida que existan input y label.
-  avatarInput.addEventListener("change", (event) => { // Escucha cuando se selecciona archivo.
-    const file = event.target.files[0]; // Toma el primer archivo elegido.
-    if (!file) return; // Sale si no hay archivo.
+if (avatarInput && avatarLabel) {
+  avatarInput.addEventListener("change", (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
 
-    const preview = document.createElement("img"); // Crea una etiqueta img para vista previa.
-    preview.src = URL.createObjectURL(file); // Genera URL temporal para la imagen.
-    preview.alt = "Avatar"; // Texto alternativo.
+    const preview = document.createElement("img");
+    preview.src = URL.createObjectURL(file);
+    preview.alt = "Avatar";
 
-    avatarLabel.textContent = ""; // Limpia las iniciales del avatar.
-    avatarLabel.appendChild(preview); // Inserta la imagen en el avatar.
-    if (footerAvatar) { // Sincroniza el avatar del footer.
-      footerAvatar.textContent = ""; // Limpia las iniciales del footer.
-      footerAvatar.appendChild(preview.cloneNode()); // Inserta copia de la imagen.
+    avatarLabel.textContent = "";
+    avatarLabel.appendChild(preview);
+
+    // Keep footer avatar synced with the main avatar
+    if (footerAvatar) {
+      footerAvatar.textContent = "";
+      footerAvatar.appendChild(preview.cloneNode());
     }
   });
 }
 
 
-// Carga inicial del perfil
+// Initial profile load
 document.addEventListener("DOMContentLoaded", async () => {
     try {
         const response = await fetch(`${port}/api/user/profile`, {
             method: "GET",
-            credentials: 'include', // INDISPENSABLE para enviar la cookie 'userId'
+            credentials: 'include',
             headers: {
                 "Accept": "application/json",
                 "Content-Type": "application/json"
@@ -40,28 +42,23 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         if (response.ok) {
             const data = await response.json();
-            console.log("Datos recibidos:", data); // Para debug
+            console.log("Received data:", data);
 
-            // 1. Nombre
             const nameElem = document.getElementById("name_profile");
-            if (nameElem) nameElem.textContent = data.full_name || "Usuario";
+            if (nameElem) nameElem.textContent = data.full_name || "User";
 
-            // 2. Rol/Lenguaje
             const rolElem = document.getElementById("rol_profile");
             if (rolElem) rolElem.textContent = data.language || "Developer";
 
-            // 3. Descripción
             const descElem = document.getElementById("description_profile");
-            if (descElem) descElem.textContent = data.description || "Sin descripción.";
+            if (descElem) descElem.textContent = data.description || "No description.";
 
-            
-
-            // 4. Iniciales del Avatar
+            // Generate avatar initials if there is no photo
             const avatarElem = document.getElementById("avatar_profile");
             if (avatarElem && data.full_name) {
                 const initials = data.full_name
                     .split(" ")
-                    .filter(word => word.length > 0) // Evita espacios extra
+                    .filter(word => word.length > 0)
                     .map(word => word[0])
                     .join("")
                     .toUpperCase();
@@ -88,28 +85,25 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 
 document.addEventListener("DOMContentLoaded", async () => {
-    console.log("Script profile.js cargado correctamente");
+    console.log("profile.js loaded");
 
-    // --- 1. REFERENCIAS ---
     const btnOpenEdit = document.getElementById("edit_profile");
     const profileView = document.getElementById("profileView");
     const editSection = document.getElementById("editSection");
     const btnCancelEdit = document.getElementById("cancelEdit");
     const editForm = document.getElementById("editProfileForm");
     
-    // Variable para guardar la foto en formato de texto (Base64)
     let imageBase64 = "";
 
-    // --- 2. LÓGICA DE LA FOTO (PREVISUALIZACIÓN) ---
     const photoInput = document.getElementById("edit_photo");
     
     if (photoInput) {
         photoInput.addEventListener("change", function(e) {
             const file = e.target.files[0];
             
-            // Si el archivo es muy grande (más de 5MB), paramos todo
+            // Prevent very large uploads
             if (file && file.size > 5 * 1024 * 1024) {
-                alert("La imagen es muy pesada. Máximo 5MB.");
+                alert("Image is too large. Max 5MB.");
                 this.value = ""; 
                 return;
             }
@@ -117,17 +111,15 @@ document.addEventListener("DOMContentLoaded", async () => {
             if (file) {
                 const reader = new FileReader();
                 reader.onload = function(event) {
-                    // Guardamos la imagen en nuestra variable
                     imageBase64 = event.target.result;
                     
-                    // Mostramos la foto en el circulito del formulario inmediatamente
                     const editImg = document.getElementById("main_avatar_img");
                     const editSpan = document.getElementById("avatar_profile");
                     
                     if (editImg && editSpan) {
                         editImg.src = imageBase64;
-                        editImg.style.display = "block"; // Mostramos imagen
-                        editSpan.style.display = "none";  // Escondemos iniciales
+                        editImg.style.display = "block";
+                        editSpan.style.display = "none";
                     }
                 };
                 reader.readAsDataURL(file);
@@ -135,16 +127,15 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
     }
 
-    // --- 3. CARGAR DATOS (CUANDO ABRES LA PÁGINA) ---
+    // Load profile data from backend
     async function loadInitialData() {
         try {
             const res = await fetch(`${port}/api/user/profile`, { credentials: 'include' });
             if (res.ok) {
                 const user = await res.json();
                 
-                // Actualizamos nombre y descripción
                 const nameEl = document.getElementById("name_profile"); if (nameEl) nameEl.textContent = user.full_name;
-                const descEl = document.getElementById("description_profile"); if (descEl) descEl.textContent = user.description || "Sin descripción";
+                const descEl = document.getElementById("description_profile"); if (descEl) descEl.textContent = user.description || "No description";
                 const rolEl = document.getElementById("rol_profile"); if (rolEl) rolEl.textContent = user.language;
                 const phoneElem = document.getElementById("phone");
                 if (phoneElem) phoneElem.textContent = user.phone;
@@ -152,41 +143,35 @@ document.addEventListener("DOMContentLoaded", async () => {
                 const countryElem = document.getElementById("country");
                 if (countryElem) countryElem.textContent = user.country;
 
-                // --- LÓGICA DEL AVATAR (MOSTRAR U OCULTAR) ---
                 const mainImg = document.getElementById("main_avatar_img");
                 const mainSpan = document.getElementById("avatar_profile");
 
                 if (user.photo && user.photo.trim() !== "") {
-                    // SI HAY FOTO: la ponemos y escondemos las iniciales
                     mainImg.src = user.photo;
                     mainImg.style.display = "block";
                     mainSpan.style.display = "none";
                 } else {
-                    // SI NO HAY FOTO: escondemos la imagen y ponemos las iniciales
                     mainImg.style.display = "none";
                     mainSpan.style.display = "block";
-                    // Ponemos las 2 primeras letras del nombre en mayúsculas
                     mainSpan.textContent = user.full_name ? user.full_name.substring(0, 2).toUpperCase() : "??";
                 }
 
-                // Pre-rellenamos el formulario de edición
                 const editName = document.getElementById("edit_name"); if (editName) editName.value = user.full_name || "";
                 const editEmail = document.getElementById("edit_email"); if (editEmail) editEmail.value = user.email || "";
                 const editDesc = document.getElementById("edit_description"); if (editDesc) editDesc.value = user.description || "";
                 const editLang = document.getElementById("edit_lenguage"); if (editLang) editLang.value = user.language || "";
                 const editPhone = document.getElementById("edit_phone"); if (editPhone) editPhone.value = user.phone || "";
-                const editCountry = document.getElementById("edit_country"); if (editCountry) editCountry.value = user.country || "";
+                const editCountry = document.getElementById("edit_country"); if (editCountry) editCountry.value = user.country;
 
         
             }
         } catch (err) { 
-            console.error("Error al cargar datos:", err); 
+            console.error("Error loading data:", err); 
         }
     }
 
     await loadInitialData();
 
-    // --- 4. CAMBIAR DE VISTAS (ABRIR/CERRAR EDITOR) ---
     btnOpenEdit?.addEventListener("click", () => {
         profileView.style.display = "none";
         editSection.style.display = "block";
@@ -197,7 +182,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         profileView.style.display = "block";
     });
 
-    // --- 5. GUARDAR CAMBIOS (BOTÓN SAVE CHANGES) ---
+    // Send updated profile to backend
     editForm?.addEventListener("submit", async (e) => {
         e.preventDefault();
 
@@ -208,7 +193,6 @@ document.addEventListener("DOMContentLoaded", async () => {
             language: document.getElementById("edit_lenguage").value,
             phone: document.getElementById("edit_phone").value,
             country: document.getElementById("edit_country").value,
-            // Si subió una foto nueva mandamos esa, si no, mandamos lo que ya había
             photo: imageBase64 || document.getElementById("main_avatar_img").src 
         };
 
@@ -221,10 +205,10 @@ document.addEventListener("DOMContentLoaded", async () => {
             });
 
             if (response.ok) {
-                alert("¡Perfil actualizado!");
+                alert("Profile updated!");
                 location.reload(); 
             } else {
-                alert("Hubo un error al guardar.");
+                alert("Error saving profile.");
             }
         } catch (error) {
             console.error("Error:", error);

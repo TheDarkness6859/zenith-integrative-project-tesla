@@ -1,94 +1,102 @@
-import { btnCreate, modalCourses, coverCourseIn, previewImg, placeHolder, courseTitle, courseDesc, moduleCont, btnModule, coursePublic, cateSelect, gameSelect, submitBtn, modalTitle, workS, desc, title, bad, cover, container, closeBtn, iframe, status, existing} from "./elements.js";
-
+import { btnCreate, modalCourses, coverCourseIn, previewImg, placeHolder, courseTitle, courseDesc, moduleCont, btnModule, coursePublic, cateSelect, gameSelect, submitBtn, modalTitle, workS, desc, title, bad, cover, container, closeBtn, iframe, status } from "./elements.js";
+ 
 const port = "http://127.0.0.1:4000/api/courses";
-
+ 
 //-----------------form logic----------------------------//
-
+ 
 let courseData = null;
 let currentCourse = null;
-
+ 
 let myModules = [];
 let publicCourses = [];
 let enrolled = [];
+ 
 
+function clearCards() {
+    document.querySelectorAll(".floating-card").forEach(c => c.remove());
+}
+ 
 async function loadCourses(){
-
+ 
     try {
         
         const [myRes, publicRes] = await Promise.all([
             fetch(`${port}/` , {method: "GET", credentials: "include", headers: { "Accept": "application/json", "Content-Type": "application/json" } }),
             fetch(`${port}/public`, { method: "GET", credentials: "include", headers: { "Accept": "application/json" } })
         ]);
-
+ 
         if(myRes.status === 401){
             window.location.href = "../../templates/auth/index.html";
             return;
         }
-
+ 
         if(myRes.ok){
-
+ 
             const data = await myRes.json();
             const created = data.data.created || [];
             enrolled = data.data.enrolled || [];
-
+ 
             courseData = created[0] || null;
-
+ 
             if(courseData){
                 myModules = courseData.modules || [];
                 myModules.sort((a,b) => a.order_index - b.order_index);
-
+ 
                 editMode();
                 loadData();
                 renderModules();
             }
-
+ 
         };
-
+ 
         if(publicRes.ok){
-
+ 
             const pData = await publicRes.json();
             publicCourses = pData.data || [];
-
+ 
         }
+ 
 
+        clearCards();
+ 
         const allCourses = [...(courseData ? [courseData] : []), ...enrolled];
         allCourses.forEach((course, index) => renderCards(course, index));
-
+ 
         workSpace();
-
+ 
     } catch (error) {
     
         console.error("Connection error (Server might be down):", error);
-
+ 
     };
-
+ 
 }
-
+ 
 window.joinCourse = async (courseId) => {
     try {
-
+ 
         const res = await fetch(`${port}/join`, {
             method: "POST",
             credentials: "include",
             headers: { "Accept": "application/json", "Content-Type": "application/json" },
             body: JSON.stringify({ courseId })
         });
-
+ 
         if(res.ok){
-
+ 
             document.getElementById("search-dropdown")?.remove();
             await loadCourses();
         }
-
+ 
     } catch (error) {
-
+ 
         console.error("Error joining course:", error);
-
+ 
     }
 }
-
+ 
 async function createOrEdit(){
-
+ 
     const dataCourse = {
         title: courseTitle.value.trim(),
         description: courseDesc.value.trim(),
@@ -97,33 +105,29 @@ async function createOrEdit(){
         category: cateSelect.value,
         game: gameSelect.value,
         modules:  myModules.map((m, idx) => ({
-
+ 
             title: m.title.trim(),
             content: m.content.trim(),
             order_index: idx
         
         }))
-
+ 
     };
-
-
-
+ 
+ 
+ 
     if (!dataCourse.title || !dataCourse.description || !dataCourse.category || !dataCourse.game) {
-
+ 
         showErrorUI("Please fill in the title, description, and select both a category and a game mode.");
         return;
-
+ 
     };
-
+ 
     const method = courseData ? "PUT" : "POST";
     const url = courseData ? `${port}/${courseData.course_id}`: `${port}/`
-
-    console.log("courseData:", courseData);
-    console.log("url:", url);
-    console.log("method:", method);
-
+ 
     try {
-
+ 
         const response = await fetch(url, {
             method,
             credentials: "include",
@@ -133,35 +137,39 @@ async function createOrEdit(){
             },
             body: JSON.stringify(dataCourse)            
         })
-
-        console.log("5. Response status:", response.status, response.ok);
-
+ 
         if(response.ok){
-
+ 
             const result = await response.json();
-
+ 
             if(!courseData){
-                courseData = result.data
-                editMode()
+                courseData = result.data;
+                editMode();
             }
-
-            console.log(`${method} exitoso`);
-            console.table(result);
+ 
+            courseData.title = dataCourse.title;
+            courseData.description = dataCourse.description;
+            courseData.photo = dataCourse.photo;
+            courseData.cover_photo = dataCourse.photo;
+            courseData.is_public = dataCourse.isPublic;
+            courseData.category_id = dataCourse.category;
+            courseData.game_id = dataCourse.game;
+ 
             toggle(false);
-
+ 
         }
         
     } catch (error) {
-
+ 
         console.error("Error to connect" + error.message);
         showErrorUI(error.message)
     
     }
-
+ 
 }
-
+ 
 function loadData(){
-
+ 
     if (courseData) {
         courseTitle.value = courseData.title || "";
         courseDesc.value = courseData.description || "";
@@ -170,20 +178,19 @@ function loadData(){
         cateSelect.value = courseData.category_id || "";
         gameSelect.value = courseData.game_id || "";
         
-        // Forzamos previsualización de imagen
         coverCourseIn.dispatchEvent(new Event('input'));
     }
-
+ 
 }
-
+ 
 function renderModules(){
-
+ 
     if(!moduleCont){
         return
     }
-
+ 
     moduleCont.innerHTML = ""
-
+ 
     if(myModules.length === 0){
         
         moduleCont.innerHTML = `
@@ -192,11 +199,11 @@ function renderModules(){
                 <p class="small mt-2">No modules added yet</p>
             </div>`;
         return
-
+ 
     }
         
     myModules.forEach((mod, index) => {
-
+ 
         const card = document.createElement('div');
         card.className = 'module-card fade-in';
         card.id = `mod-${mod.id}`;
@@ -218,23 +225,23 @@ function renderModules(){
                 </button>
             </div>
         `;
-
+ 
         const titleIn = card.querySelector('.module-title-input');
         const contentIn = card.querySelector('.module-content-area');
         const deleteBtn = card.querySelector('.btn-delete-mod');
-
+ 
         titleIn.addEventListener('input', (e) => mod.title = e.target.value);
         contentIn.addEventListener('input', (e) => mod.content = e.target.value);
         deleteBtn.addEventListener('click', () => removeModule(mod.id));
-
+ 
         moduleCont.appendChild(card);
     
     });
-
+ 
 }
-
+ 
 function addModule(){
-
+ 
     const tempId = 'temp-' + crypto.randomUUID(); 
     
     const newModule = {
@@ -247,21 +254,21 @@ function addModule(){
     myModules.push(newModule);
     renderModules();
 }
-
+ 
 function removeModule(id) {
     myModules = myModules.filter(m => m.id !== id);
     renderModules();
 }
-
+ 
 function editMode(){
-
+ 
     btnCreate.innerHTML = "<i class='bi bi-pencil-square me-2'></i>Edit Course";
     modalTitle.textContent = "Edit your course:";
     submitBtn.innerHTML = `<i class="bi bi-check-circle-fill me-2"></i>Update`;
-
+ 
 }
-
-
+ 
+ 
 function showErrorUI(message) {
     const msg = document.createElement('div');
     msg.className = "alert alert-danger mt-3 fade-in shadow-sm";
@@ -273,41 +280,41 @@ function showErrorUI(message) {
         setTimeout(() => msg.remove(), 6000);
     }
 }
-
+ 
 if(submitBtn){
     submitBtn.addEventListener("click", (e) => {
         createOrEdit();
     })
 }
-
-if(addModule){
+ 
+if(btnModule){
     btnModule.addEventListener("click", addModule)
 }
-
+ 
 //--------------------------------------------------------------//
-
+ 
 function selectors(elementId, data, text){
-
+ 
     const select = document.getElementById(elementId);
-
+ 
     if(!select){
         return
     }
-
+ 
     select.innerHTML = `<option selected disabled hidden>${text}</option>`;
-
+ 
     data.forEach(item => {
-
+ 
         const option = document.createElement("option");
-
+ 
         option.value = item.id;
         option.textContent = item.name;
         select.appendChild(option)
         
     });
-
+ 
 }
-
+ 
 async function loadSelectors() {
     
     try {
@@ -316,96 +323,96 @@ async function loadSelectors() {
             fetch(`${port}/categories`),
             fetch(`${port}/games`)
         ]);
-
+ 
         const categoriesData = await categoriRes.json();
         const gamesData = await gameRes.json()
-
+ 
         selectors("select-Cate", categoriesData.data, "Choose a Category")
         selectors("select-Game", gamesData.data, "choose a game")
-
-
+ 
+ 
     } catch (error) {
         
         console.error("Connection error (Server might be down):", error);
-
+ 
     }
-
+ 
 }
-
-
+ 
+ 
 function toggle(show){
     modalCourses.style.display = show ? "flex" : "none";
     if(show) loadData();
 }
-
+ 
 btnCreate.addEventListener("click", () => toggle(true));
-
+ 
 modalCourses.addEventListener("click", (e) => {
     if(e.target === modalCourses) toggle(false);
 })
-
+ 
 coverCourseIn.addEventListener("input", (e) => {
     const url = e.target.value.trim();
-
+ 
     const existImg = previewImg.querySelector("img");
-
+ 
     if(existImg) existImg.remove()
-
+ 
     if(url){
-
+ 
         const img = document.createElement("img");
-
+ 
         img.src = url;
         img.alt = "Sorry";
-
+ 
         img.onerror = () => {
             img.remove()
             placeHolder.style.display = "flex";
         };
-
+ 
         img.onload = () => {
             placeHolder.style.display = "none";
         };
-
+ 
         previewImg.appendChild(img);
     }else{
         placeHolder.style.display = "flex"
     }
 })
-
+ 
 document.addEventListener('DOMContentLoaded', async () => {
     await loadSelectors();
     await loadCourses();
 });
-
-
+ 
+ 
 function renderCards(data, index) {
     
     const card = document.createElement("div");
     card.className= "floating-card"
     card.id = `card_${data.course_id}`;
-
-
+ 
+ 
     const savedPos = JSON.parse(localStorage.getItem(`pos_${card.id}`));
-
+ 
     let startX = 80 + (index * 60) + Math.random() * 40;
     let startY = 80 + (index * 60) + Math.random() * 40;
-
+ 
     if(savedPos){
         startX = savedPos.x;
         startY = savedPos.y;
     }
-
+ 
     const margin = 24;
     startX = Math.max(margin, Math.min(startX, innerWidth - 320 - margin));
     startY = Math.max(margin, Math.min(startY, innerHeight - 250 - margin - 75));
-
+ 
     card.style.left = startX + "px";
     card.style.top = startY + "px";
-
+ 
     const headerColor = data.is_mine ? "#1e3a5f" : "#1e3a2f";
     const authorTag = data.is_mine ? "Mine" : (data.author_name || "Community");
-
+ 
     card.innerHTML = `
         <div class="card-header-drag flex items-center gap-2 px-4 py-3 rounded-t-2xl cursor-grab" style="background: ${headerColor};">
             <i class="bi bi-mortarboard-fill" style="color:rgba(255,255,255,0.8); font-size:15px;"></i>
@@ -423,7 +430,7 @@ function renderCards(data, index) {
             </div>
         </div>
     `;
-
+ 
     // Mouse
     card.addEventListener("dblclick", () => window.openPlayer(data));
     
@@ -434,84 +441,84 @@ function renderCards(data, index) {
         if(now - lastTap < 300) window.openPlayer(data);
         lastTap = now;
     });
-
+ 
     document.body.appendChild(card);
     draggable(card)
-
+ 
 }
-
-
+ 
+ 
 function collision(item){
-
+ 
     const side1 = item.getBoundingClientRect();
     const others = document.querySelectorAll(".floating-card");
-
+ 
     for(let other of others){
-
+ 
         if(other === item) continue
-
+ 
         const side2 = other.getBoundingClientRect();
         const collisionM = 10;
         const overlap = !(side1.right + collisionM < side2.left || side1.left - collisionM > side2.right || side1.bottom + collisionM < side2.top  || side1.top - collisionM > side2.bottom)
-
+ 
         if(overlap) return true;
-
+ 
     }
-
+ 
     return false;
-
+ 
 }
-
+ 
 function draggable(item){
     const header = item.querySelector('.card-header-drag');
     let mouseX, mouseY, initialX, initialY;
     const margin = 24, bottomNavHeight = 75, iman = 40;
-
+ 
     function onMove(clientX, clientY) {
         let diffX = clientX - mouseX;
         let diffY = clientY - mouseY;
         mouseX = clientX;
         mouseY = clientY;
-
+ 
         let nT = item.offsetTop + diffY;
         let nL = item.offsetLeft + diffX;
         let maxBottom = window.innerHeight - item.offsetHeight - margin - bottomNavHeight;
-
+ 
         nT = Math.max(margin, Math.min(nT, maxBottom));
         nL = Math.max(margin, Math.min(nL, window.innerWidth - item.offsetWidth - margin));
-
+ 
         item.style.top = nT + "px";
         item.style.left = nL + "px";
-
+ 
         if(collision(item)) item.classList.add("collision-warning");
         else item.classList.remove("collision-warning");
     }
-
+ 
     function onEnd() {
         item.style.transition = 'all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1)';
-
+ 
         if(collision(item)){
             item.style.left = initialX + "px";
             item.style.top = initialY + "px";
             item.classList.remove("collision-warning");
         } else {
             item.classList.remove("collision-warning");
-
+ 
             let fT = item.offsetTop, fL = item.offsetLeft;
             const maxBottom = window.innerHeight - item.offsetHeight - margin - bottomNavHeight;
-
+ 
             if(fT < margin + iman) fT = margin;
             if(fT > maxBottom - iman) fT = maxBottom;
             if(fL < margin + iman) fL = margin;
             if(fL > window.innerWidth - item.offsetWidth - margin - iman) fL = window.innerWidth - item.offsetWidth - margin;
-
+ 
             item.style.top = fT + "px";
             item.style.left = fL + "px";
-
+ 
             localStorage.setItem(`pos_${item.id}`, JSON.stringify({ x: fL, y: fT }));
         }
     }
-
+ 
     // Mouse
     header.onmousedown = (e) => {
         e.preventDefault();
@@ -520,7 +527,7 @@ function draggable(item){
         mouseY = e.clientY;
         initialX = item.offsetLeft;
         initialY = item.offsetTop;
-
+ 
         document.onmousemove = (e) => { e.preventDefault(); onMove(e.clientX, e.clientY); };
         document.onmouseup = () => {
             document.onmousemove = null;
@@ -528,7 +535,7 @@ function draggable(item){
             onEnd();
         };
     };
-
+ 
     // Touch
     header.addEventListener('touchstart', (e) => {
         e.preventDefault();
@@ -539,24 +546,24 @@ function draggable(item){
         initialX = item.offsetLeft;
         initialY = item.offsetTop;
     }, { passive: false });
-
+ 
     header.addEventListener('touchmove', (e) => {
         e.preventDefault();
         const touch = e.touches[0];
         onMove(touch.clientX, touch.clientY);
     }, { passive: false });
-
+ 
     header.addEventListener('touchend', () => { onEnd(); });
 };
-
+ 
 function workSpace(){
-    if(courseData || publicCourses.length > 0){
+    if(courseData || enrolled.length > 0 || publicCourses.length > 0){
         workS.classList.add("dashboard-mode")
     }else{
         workS.classList.remove("dashboard-mode")
     }
 };
-
+ 
 window.addEventListener('message', async (e) => {
     if(e.data.type === 'GAME_OVER'){
         await saveScore({
@@ -566,10 +573,10 @@ window.addEventListener('message', async (e) => {
         });
     }
 });
-
-
+ 
+ 
 async function saveScore({score, gameId, courseId}) {
-
+ 
     try {
         
         const res = await fetch(`${port}/games`, {
@@ -581,9 +588,9 @@ async function saveScore({score, gameId, courseId}) {
             },
             body: JSON.stringify({score, gameId, courseId})  
         })
-
+ 
         const data = await res.json()
-
+ 
         if(res.ok){
             if(data.data){
                 console.log("Score save:", data.data);
@@ -591,79 +598,81 @@ async function saveScore({score, gameId, courseId}) {
                 console.log("Alredy exists sesion for this course");
             }
         }
-
+ 
     } catch (error) {
         
         console.error("Connection error (Server might be down):", error);
-
+ 
     }
     
 };
-
+ 
 window.openPlayer = (data) => {
-
+ 
     currentCourse = data
     
     document.querySelectorAll(".floating-card").forEach(c => c.style.display="none");
-
+ 
     title.innerText = data.title;
     desc.innerText = data.description || "...";
     cover.src = data.cover_photo || "";
-
+ 
     bad.innerHTML = data.is_mine ? `<span class="bg-blue-500 text-white text-[10px] font-bold px-3 py-1 rounded-full">MI PROYECTO</span>` : `<span class="bg-slate-500 text-white text-[10px] font-bold px-3 py-1 rounded-full">COMUNIDAD</span>`;
     const mod = document.getElementById("player-modules"); mod.innerHTML = "";
-
+ 
     if(data.modules?.length > 0) {
         data.modules.forEach((m, i) => mod.innerHTML += `<div class="bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white transition-colors hover:bg-white/10 flex gap-3 align-items-center"><div class="bg-blue-500 text-white w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs shrink-0">${i+1}</div><h6 class="font-bold m-0 text-sm">${m.title || "Módulo "+(i+1)}</h6></div>`);
     } else mod.innerHTML = "<p class='text-white/50 text-xs'>No hay lecciones.</p>";
-
+ 
     container.classList.add("visible");
     closeBtn.style.display="block";
-
+ 
     initMiniGame();
-
+ 
 };
-
+ 
 window.closePlayer = () => { 
     iframe.src = "about:blank"; 
     container.classList.remove("visible"); 
     closeBtn.style.display = "none"
     document.querySelectorAll(".floating-card").forEach(c => c.style.display=""); 
 };
-
+ 
 closeBtn.addEventListener("click", closePlayer);
-
+ 
 window.initMiniGame = () => {
-
+ 
     if (iframe) {
         status.innerText = "Recargando actividad...";
-
-        iframe.src = `../../games/${currentCourse.game_src}/index.html`;
+ 
+        const gameSrc = currentCourse.game_src || currentCourse.game_id;
+        iframe.src = `../../games/${gameSrc}/index.html`;
         setTimeout(() => { status.innerText = ""; }, 1000);
     }
-
+ 
 };
-
+ 
 window.searchCourse = (query) => {
-
+ 
     const enrolledIds = enrolled.map(c => c.course_id);
-
+ 
     const results = publicCourses.filter(c =>
         (c.title.toLowerCase().includes(query.toLowerCase()) ||
         c.description?.toLowerCase().includes(query.toLowerCase())) &&
         !enrolledIds.includes(c.course_id) &&
         c.course_id !== courseData?.course_id  
     );
-
+ 
     renderResults(results);
 }
-
+ 
 function renderResults(results){
+ 
 
-    if(existing) existing.remove();
-
+    document.getElementById("search-dropdown")?.remove();
+ 
     if(results.length === 0) return;
-
+ 
     const dropdown = document.createElement("div");
     dropdown.id = "search-dropdown";
     dropdown.className = `
@@ -672,7 +681,7 @@ function renderResults(results){
         rounded-2xl shadow-[0_-10px_40px_rgba(0,0,0,0.5)] 
         overflow-hidden z-[9000] max-h-[400px] overflow-y-auto
     `;
-
+ 
     dropdown.innerHTML = results.map(c => `
         <div class="flex gap-3 p-3 hover:bg-white/5 transition-colors border-b border-white/5 last:border-0">
             <img 
@@ -696,15 +705,15 @@ function renderResults(results){
             </div>
         </div>
     `).join('');
-
+ 
     const searchWrapper = document.querySelector(".search");
     searchWrapper.style.position = "relative";
-
+ 
     dropdown.style.right = "0";
     dropdown.style.left = "auto";
-
+ 
     searchWrapper.appendChild(dropdown);
-
+ 
     setTimeout(() => {
         document.addEventListener("click", (e) => {
             if(!dropdown.contains(e.target)){
@@ -712,5 +721,5 @@ function renderResults(results){
             }
         }, { once: true });
     }, 0);
-
+ 
 }

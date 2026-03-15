@@ -11,7 +11,6 @@ const registerUser = async (full_name, email, password ) => {
     try {
         await client.query('BEGIN');
 
-        // 1. Insertamos el usuario en la tabla 'users'
         const userQuery = "INSERT INTO users (full_name, email, password) VALUES ($1, $2, $3) RETURNING id";
         const userResult = await client.query(userQuery, [full_name, email, hashedPassword]);
         const userId = userResult.rows[0].id;
@@ -22,12 +21,12 @@ const registerUser = async (full_name, email, password ) => {
             VALUES ($1, $2, $3, $4, $5, $6)
         `;
         
-        // Valores por defecto seguros
+        //Values per defect sures
         const defaultDescription = "¡Bienvenido a mi perfil , te invito a que modifiques mi informacion con el boton que esta por aqui -->!";
         const defaultLang = "Spanish";
-        const defaultPhone = "0";   // Si esto falla, prueba con null
-        const defaultCountry = "0"; // Si esto falla, prueba con null
-        const defaultPhoto = "";    // Si esto falla, prueba con null
+        const defaultPhone = "0";   
+        const defaultCountry = "0"; 
+        const defaultPhoto = "";   
 
         await client.query(profileQuery, [
             userId, 

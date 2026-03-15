@@ -5,16 +5,15 @@ import pool from "../configuration/posgresdb.js";
 
 const streakRoutes = Router();
 
-// 1. Obtener estado actual
+// 1. obtain actual status
 streakRoutes.get("/status", isLoged, getStreakStatus);
 
-// 2. Ruta corregida con isLoged
+// 2. ruta repaired with isloged
 streakRoutes.put("/update-manual", isLoged, async (req, res) => {
     try {
         const userId = req.userId; 
         const { nuevoValor } = req.body;
 
-        // Cambiamos a app_zenith.user_points
         const result = await pool.query(
             `UPDATE app_zenith.user_points 
              SET current_streak = $1, 

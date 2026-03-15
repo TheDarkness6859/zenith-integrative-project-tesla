@@ -23,7 +23,7 @@ router.get("/google/callback",
       maxAge: 1000 * 60 * 60 * 24 * 7
     });
  
-    // Usuario nuevo → bienvenida, usuario existente → notificación de login
+    // User new → welcome, user exist → notify of login
     if (!google_id) {
       notifyRegister(full_name, email);
     } else {
