@@ -142,14 +142,23 @@ async function loadDashboardStreak() {
 
 // Initialize dashboard data when the page loads
 document.addEventListener('DOMContentLoaded', () => {
+    fetch("http://127.0.0.1:4000/api/user/profile", {
+        method: "GET",
+        credentials: "include"
+    }).then(res => {
+        if (res.status === 401) {
+            window.location.href = "../../templates/auth/index.html";
+            return;
+        }
+        // Card 1: Profile preview
+        loadDashboardProfile();
 
-    // Card 1: Profile preview
-    loadDashboardProfile();
+        // Card 2: Streak information
+        loadDashboardStreak();
 
-    // Card 2: Streak information
-    loadDashboardStreak();
-
-    // Card 3: Courses preview
-    loadDashboardCourses(); 
-
+        // Card 3: Courses preview
+        loadDashboardCourses(); 
+    }).catch(() => {
+        window.location.href = "../../templates/auth/index.html";
+    });
 });

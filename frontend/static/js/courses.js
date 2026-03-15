@@ -280,41 +280,41 @@ function showErrorUI(message) {
         setTimeout(() => msg.remove(), 6000);
     }
 }
- 
+
 if(submitBtn){
     submitBtn.addEventListener("click", (e) => {
         createOrEdit();
     })
 }
- 
+
 if(btnModule){
     btnModule.addEventListener("click", addModule)
 }
- 
+
 //--------------------------------------------------------------//
- 
+
 function selectors(elementId, data, text){
- 
+
     const select = document.getElementById(elementId);
- 
+
     if(!select){
         return
     }
- 
+
     select.innerHTML = `<option selected disabled hidden>${text}</option>`;
- 
+
     data.forEach(item => {
- 
+
         const option = document.createElement("option");
- 
+
         option.value = item.id;
         option.textContent = item.name;
         select.appendChild(option)
         
     });
- 
+
 }
- 
+
 async function loadSelectors() {
     
     try {
@@ -323,63 +323,63 @@ async function loadSelectors() {
             fetch(`${port}/categories`),
             fetch(`${port}/games`)
         ]);
- 
+
         const categoriesData = await categoriRes.json();
         const gamesData = await gameRes.json()
- 
+
         selectors("select-Cate", categoriesData.data, "Choose a Category")
         selectors("select-Game", gamesData.data, "choose a game")
- 
- 
+
+
     } catch (error) {
         
         console.error("Connection error (Server might be down):", error);
- 
+
     }
- 
+
 }
- 
- 
+
+
 function toggle(show){
     modalCourses.style.display = show ? "flex" : "none";
     if(show) loadData();
 }
- 
+
 btnCreate.addEventListener("click", () => toggle(true));
- 
+
 modalCourses.addEventListener("click", (e) => {
     if(e.target === modalCourses) toggle(false);
 })
- 
+
 coverCourseIn.addEventListener("input", (e) => {
     const url = e.target.value.trim();
- 
+
     const existImg = previewImg.querySelector("img");
- 
+
     if(existImg) existImg.remove()
- 
+
     if(url){
- 
+
         const img = document.createElement("img");
- 
+
         img.src = url;
         img.alt = "Sorry";
- 
+        
         img.onerror = () => {
             img.remove()
             placeHolder.style.display = "flex";
         };
- 
+
         img.onload = () => {
             placeHolder.style.display = "none";
         };
- 
+
         previewImg.appendChild(img);
     }else{
         placeHolder.style.display = "flex"
     }
 })
- 
+
 document.addEventListener('DOMContentLoaded', async () => {
     await loadSelectors();
     await loadCourses();
@@ -625,16 +625,21 @@ window.openPlayer = (data) => {
     } else mod.innerHTML = "<p class='text-white/50 text-xs'>No hay lecciones.</p>";
  
     container.classList.add("visible");
-    closeBtn.style.display="block";
+    closeBtn.style.display = "block";
+    btnCreate.style.display = "none";
  
     initMiniGame();
  
 };
  
 window.closePlayer = () => { 
-    iframe.src = "about:blank"; 
+    iframe.src = "about:blank";
+
     container.classList.remove("visible"); 
+
     closeBtn.style.display = "none"
+    btnCreate.style.display = "flex"
+
     document.querySelectorAll(".floating-card").forEach(c => c.style.display=""); 
 };
  

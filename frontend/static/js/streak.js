@@ -114,8 +114,12 @@ async function initDashboard() {
             credentials: 'include'
         });
 
+        if (response.status === 401) {
+            window.location.href = "../../templates/auth/index.html";
+            return;
+        }
         if (!response.ok) {
-            renderCalendar([]); 
+            renderCalendar([]);
             return;
         }
 

@@ -20,6 +20,8 @@ authRoutes.post("/logout", (req, res) => {
     return res.json({ message: "Logged out" });
 });
 
+authRoutes.get("/confirm/:token", authController.confirmEmail);
+
 authRoutes.get("/", isGuest, (req, res) =>{
 
     res.redirect("/register")
