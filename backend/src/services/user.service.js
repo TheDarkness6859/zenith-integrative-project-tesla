@@ -17,8 +17,7 @@ const profile = async (userId) => {
 };
 
 // 2. Save or update profile
-const updateProfile = async (userId, data) => {
-
+const updateProfile = async (userId, data) => { 
     const { full_name, email, description, language, phone, country, photo } = data;
 
     // Use a transaction to keep both tables consistent
