@@ -186,7 +186,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         } catch (error) {
             console.error("Logout error:", error);
         } finally {
-            window.location.href = "/frontend/templates/auth/index.html";
+            const basePath = window.location.pathname.split("/frontend/")[0] || "";
+            window.location.href = `${basePath}/frontend/templates/auth/index.html`;
         }
     });
 
