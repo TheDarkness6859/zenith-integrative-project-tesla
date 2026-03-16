@@ -420,7 +420,67 @@ $$ LANGUAGE plpgsql;
 
 --------------------------------------------------------
 
+------------get user dashboard-----------------------
 
+CREATE OR REPLACE FUNCTION get_user_dashboard_history(p_user_id UUID)
+RETURNS TABLE (
+    "Name" TEXT,
+    "Efficiency" TEXT,
+    "xp" INTEGER,
+    "Date" TIMESTAMP
+) AS $$
+BEGIN
+    RETURN QUERY
+    -- A. Cursos (4 columnas)
+    SELECT 
+        c.title::TEXT as "Name", 
+        '100%'::TEXT as "Efficiency", 
+        50 as "xp", 
+        c.created_at as "Date"
+    FROM users_course uc
+    JOIN course c ON uc.course_id = c.id
+    WHERE uc.user_id = p_user_id
+
+    UNION ALL
+
+    -- B. Juegos (4 columnas - coincidencia exacta)
+    SELECT 
+        COALESCE(gc.name, ugs.game_id::TEXT) as "Name", 
+        '100%'::TEXT as "Efficiency", 
+        ugs.earned_points as "xp", 
+        ugs.played_at as "Date"
+    FROM user_game_session ugs
+    LEFT JOIN game_catalog gc ON ugs.game_id = gc.id
+    WHERE ugs.user_id = p_user_id
+    
+    ORDER BY "Date" DESC;
+END;
+$$ LANGUAGE plpgsql;
+
+----------------------------------
+
+------------function trigger----------
+
+CREATE OR REPLACE FUNCTION app_zenith.create_user_points_entry()
+RETURNS TRIGGER AS $$
+BEGIN
+    INSERT INTO app_zenith.user_points (user_id, lifetime_points, current_balance)
+    VALUES (NEW.id, 0, 0)
+    ON CONFLICT (user_id) DO NOTHING;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_create_points_after_signup
+AFTER INSERT ON app_zenith.users
+FOR EACH ROW
+EXECUTE FUNCTION app_zenith.create_user_points_entry();
+
+----------------------------------------------------
+
+----------------------data of tables-----------------
+
+-- Categories
 INSERT INTO app_zenith.course_category (name, description) VALUES
 ('Software Development', 'Coding, algorithms, and software architecture.'),
 ('Programming', 'General programming logic and language syntax.'),
