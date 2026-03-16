@@ -1,7 +1,8 @@
-const PORT = "http://127.0.0.1:4000";
-
 const avatarInput = document.querySelector("#avatarInput");
 const avatarLabel = document.querySelector(".avatar");
+
+const port = "https://wirintegration-production.up.railway.app";
+
 
 if (avatarInput && avatarLabel) {
     avatarInput.addEventListener("change", (event) => {
@@ -32,7 +33,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         photoInput.addEventListener("change", function (e) {
             const file = e.target.files[0];
             if (file && file.size > 5 * 1024 * 1024) {
-                alert("La imagen es demasiado grande. Máximo 5MB.");
+                alert("The image is very big. Max 5MB.");
                 this.value = "";
                 return;
             }
@@ -52,21 +53,21 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     async function loadInitialData() {
         try {
-            const res = await fetch(`${PORT}/api/user/profile`, { credentials: "include" });
+            const res = await fetch(`${port}/api/user/profile`, { credentials: "include" });
 
             if (res.status === 401) {
-                console.warn("Sesión expirada. Redirigiendo al login...");
+                console.warn("Expired sesion redirect to login.");
                 window.location.href = "/frontend/templates/auth/index.html";
                 return;
             }
 
             if (!res.ok) {
-                console.error("Error del servidor:", res.status);
+                console.error("Error in serverr:", res.status);
                 return;
             }
 
             const user = await res.json();
-            console.log("Perfil recibido:", user);
+            /*console.log("Perfil recibido:", user); */
 
             const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val || ""; };
             set("name_profile",        user.full_name);
@@ -101,11 +102,11 @@ document.addEventListener("DOMContentLoaded", async () => {
             if (user.id) {
                 await renderBadges(user.id);
             } else {
-                console.error("user.id no llegó desde /api/user/profile. Verifica que el SELECT incluya u.id en user.service.js");
+                console.error("Cant't get user");
             }
 
         } catch (err) {
-            console.error("Error al cargar datos del perfil:", err);
+            console.error("Error to load user data:", err);
         }
     }
 
@@ -124,7 +125,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     // --- Logout ---
     btnLogout?.addEventListener("click", async () => {
         try {
-            await fetch(`${PORT}/api/auth/logout`, { method: "POST", credentials: "include" });
+            await fetch(`${port}/api/auth/logout`, { method: "POST", credentials: "include" });
         } catch (error) {
             console.error("Logout error:", error);
         } finally {
@@ -148,7 +149,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         };
 
         try {
-            const response = await fetch(`${PORT}/api/user/profileput`, {
+            const response = await fetch(`${port}/api/user/profileput`, {
                 method:  "PUT",
                 headers: { "Content-Type": "application/json" },
                 body:    JSON.stringify(formData),
@@ -156,10 +157,10 @@ document.addEventListener("DOMContentLoaded", async () => {
             });
 
             if (response.ok) {
-                alert("¡Perfil actualizado!");
+                alert("¡Profile updated!");
                 location.reload();
             } else {
-                alert("Error al guardar el perfil.");
+                alert("Error to save the profile.");
             }
         } catch (error) {
             console.error("Error:", error);

@@ -1,6 +1,6 @@
 import { btnCreate, modalCourses, coverCourseIn, previewImg, placeHolder, courseTitle, courseDesc, moduleCont, btnModule, coursePublic, cateSelect, gameSelect, submitBtn, modalTitle, workS, title, bad, cover, container, closeBtn, iframe, status } from "./elements.js";
  
-const port = "http://127.0.0.1:4000/api/courses";
+const port = "https://wirintegration-production.up.railway.app/api/courses";
  
 //-----------------form logic----------------------------//
  

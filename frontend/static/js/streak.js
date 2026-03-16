@@ -1,4 +1,4 @@
-const API_URL = "http://127.0.0.1:4000/api/streak/status";
+const API_URL = "https://wirintegration-production.up.railway.app/api/streak/status";
 
 // Calendar rendering
 function renderCalendar(activeDays) {

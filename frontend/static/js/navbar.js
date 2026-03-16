@@ -2,7 +2,7 @@ const avatarInput = document.querySelector("#avatarInput");
 const avatarLabel = document.querySelector(".avatar");
 let footerAvatar; // Reference to the avatar element inside the loaded navbar/footer
 
-const apiUrl = "http://127.0.0.1:4000/";
+const apiUrl = "https://wirintegration-production.up.railway.app/";
 
 // 1. Load the navbar/footer partial dynamically
 fetch("../partials/navbar.html")

@@ -9,7 +9,7 @@ import {
     confirmPassword
 } from "./elements.js";
  
-const port = "http://127.0.0.1:4000"
+const port = "https://wirintegration-production.up.railway.app"
  
 document.addEventListener("DOMContentLoaded", async () => {
  
